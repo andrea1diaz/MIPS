@@ -1,32 +1,28 @@
-module Register(clk, rst, regRead_1, regRead_2, regWrite, regMemWrite, writeBack, dataRead_1, dataRead_2);
-
-reg clk, rst, regWrite;
-reg [4:0] regRead_2, regRead_1, regMemWrite;
-reg [31:0] dataRead_1, dataRead_2, writeBack;
+module Register(clk, rst, reg_file, readRegister1, readRegister2, writeRegister,
+					 readData1, readData2,
+					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc);
+wire clk, rst;
+wire RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc;
+reg [4:0] readRegister1, readRegister2, writeRegister;
+reg [31:0] readData1, readData2;
 reg [31:0] reg_file [31:0];
 
-integer i;
-initial begin
-
-for( i = 0; i < 32; i = i + 1 )
-    register_file[ i ] = 32'h00000001;
-
-always@(posedge clk, rst, writeBack, regMemWrite, regWrite)
+always@(posedge clk)
 begin
 	if(rst)
 		integer i;
-		for(i = 0;i < 32;i = i +1)
+		for(i = 0;i < 32;i = i +1) begin
 			reg_file[i] = 32'h00000000;
+		end
 	if(regWrite)
-		reg_file[regMemWrite] = writeBack;
+		reg_file[writeRegister] = writeBack;
 end
 
-always@(posedge clk, regWrite)
+always@(posedge clk, RegisterWrite)
 begin
-	if(!regWrite)
-		dataRead_1 = reg_file[regRead_1];
-		dataRead_2 = reg_file[regRead_2]; 
+	if(!RegisterWrite) begin
+		readData1 = reg_file[readRegister1];
+		readData2 = reg_file[readRegister2];
+	end
 end
 endmodule
-
-

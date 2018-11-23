@@ -1,23 +1,23 @@
-module ALUcontrol (ALUoperation, funct, ALUcontrol);
-  output [3:0]ALUcontrol;
-  input [1:0]ALUop;
-  input [5:0]funct;
+module ALUcontrol (clk, rst, ALUOpcode, ALUControl, op_5_0);
+  output [3:0]ALUControl;
+  input [1:0] ALUOpcode;
+  input [5:0] op_5_0;
 
-  always @ ( ALUoperation, funct ) begin
-    if (ALUop == 2'b00) ALUcontrol = 4'b0010; // load word - store word
-    if (ALUop == 2'b01) ALUcontrol = 4'b0110; // branch equal
-    if (ALUop == 2'b10) begin
-        case (funct[3:0])
+  always @ (posedge clk) begin
+    if (ALUOpcode == 2'b00) ALUControl = 4'b0010; // load word - store word - addi
+    if (ALUOpcode == 2'bx1) ALUControl = 4'b0110; // branch equal - bnq - subi
+    if (ALUOpcode == 2'b1x) begin
+        case (op_5_0[3:0])
           4'b0000:
-            ALUcontrol = 4'b0010; // add
+            ALUControl = 4'b0010; // add
           4'b0010:
-            ALUcontrol = 4'b0110; // subtract
+            ALUControl = 4'b0110; // subtract
           4'b0100:
-            ALUcontrol = 4'b0000; // AND
+            ALUControl = 4'b0000; // AND
           4'b0101:
-            ALUcontrol = 4'b0001; // OR
+            ALUControl = 4'b0001; // OR
           4'b1010:
-            ALUcontrol = 4'b0111; // set on less than
+            ALUControl = 4'b0111; // set on less than
         endcase
       end
   end
