@@ -1,4 +1,6 @@
 *.bak
 *.mpf
 *.mti
+*.vstf
 /work
+/Tests

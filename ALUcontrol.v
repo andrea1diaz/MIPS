@@ -1,4 +1,4 @@
-module ALUcontrol (clk, rst, ALUOpcode, ALUControl, op_5_0);
+module ALUControl (clk, rst, ALUOpcode, ALUControl, op_5_0);
   output reg [3:0]ALUControl;
   input [1:0] ALUOpcode;
   input [5:0] op_5_0;

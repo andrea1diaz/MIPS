@@ -1,12 +1,10 @@
 module Mux(opt1, opt2, out, select);
-input opt1, opt2;
+input [31:0] opt1, opt2;
 input select;
-output out;
 
-wire select;
-wire [31:0] opt1, opt2;
-wire [31:0] out;
+output reg [31:0] out;
 
-assign out = select ? opt1 : opt2;
-
+always@(opt1 or opt2 or select) begin
+	out = select ? opt1 : opt2;
+end
 endmodule
