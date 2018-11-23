@@ -11,12 +11,15 @@ reg [31:0] reg_file [31:0];
 integer i;
 always@(posedge clk)
 begin
-	if(rst)
+	if(rst) begin
 		for(i = 0;i < 32;i = i +1) begin
 			reg_file[i] = 32'h00000000;
 		end
-	if(RegisterWrite)
+	end
+
+	if(RegisterWrite) begin
 		reg_file[writeRegister] <= writeBack;
+	end
 end
 
 always@(posedge clk, RegisterWrite)

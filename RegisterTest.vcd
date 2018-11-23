@@ -1,0 +1,73 @@
+$date
+	Fri Nov 23 17:47:57 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module RegisterTest $end
+$var wire 32 ! readData2 [31:0] $end
+$var wire 32 " readData1 [31:0] $end
+$var reg 1 # ALUSrc $end
+$var reg 1 $ Branch $end
+$var reg 1 % MemoryToRegister $end
+$var reg 1 & MemoryWrite $end
+$var reg 1 ' RegisterWrite $end
+$var reg 1 ( clk $end
+$var reg 5 ) readRegister1 [4:0] $end
+$var reg 5 * readRegister2 [4:0] $end
+$var reg 1 + rst $end
+$var reg 32 , writeBack [31:0] $end
+$var reg 5 - writeRegister [4:0] $end
+$var integer 32 . i [31:0] $end
+$scope module register $end
+$var wire 1 # ALUSrc $end
+$var wire 1 $ Branch $end
+$var wire 1 % MemoryToRegister $end
+$var wire 1 & MemoryWrite $end
+$var wire 1 ' RegisterWrite $end
+$var wire 1 ( clk $end
+$var wire 5 / readRegister1 [4:0] $end
+$var wire 5 0 readRegister2 [4:0] $end
+$var wire 1 + rst $end
+$var wire 32 1 writeBack [31:0] $end
+$var wire 5 2 writeRegister [4:0] $end
+$var reg 32 3 readData1 [31:0] $end
+$var reg 32 4 readData2 [31:0] $end
+$var integer 32 5 i [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx 5
+bx 4
+bx 3
+b1 2
+b11111111111111111111111111111111 1
+bx 0
+bx /
+b100000 .
+b1 -
+b11111111111111111111111111111111 ,
+x+
+bx *
+bx )
+1(
+1'
+x&
+x%
+x$
+x#
+bx "
+bx !
+$end
+#2
+0(
+#4
+0'
+#6
+b1 )
+b1 /
