@@ -1,4 +1,5 @@
 module SignExtend(clk, in, out);
+input clk;
 input [15:0] in;
 output out;
 
