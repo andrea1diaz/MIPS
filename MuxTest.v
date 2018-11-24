@@ -9,10 +9,9 @@ module MuxTest();
     Mux mux (in1, in2, out, select);
 
     initial begin
-  $dumpfile("MuxTest.vcd");
-  $dumpvars(0, MuxTest);
-
-	$display("Test mux");
+	$dumpfile("MuxTest.vcd");
+	$dumpvars(0, MuxTest);
+	$display("MuxTest Test");
 	test_vals = 0;
 	in1 = 32'b0;
 	in2 = 32'b0;
@@ -20,10 +19,9 @@ module MuxTest();
 	for(test_vals = 0;test_vals < 8;test_vals = test_vals + 1) begin
 		{in1[0],in2[1],select} = test_vals[2:0];
 		#5
-		$display("in1 = %d, in2 = %d, select = %b. Output = %d",
- 		in1, in2, select, out);
+		$display("in0 = %d, in1 = %d, select = %b. Output = %d",
+ 		out0, out1, select, out);
 	end
 
-  $finish;
-	end
+    end
 endmodule
