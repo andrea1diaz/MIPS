@@ -13,6 +13,7 @@
 `include "ShiftLeft2_25.v"
 `include "SignExtend.v"
 `include "PC.v"
+`include "Add_Single.v"
 
 module DataPath();
 	reg clk, rst;
