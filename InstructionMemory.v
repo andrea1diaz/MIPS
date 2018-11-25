@@ -9,6 +9,7 @@ always@(clk) begin
 	instruct[23:16] <= instruction_mem[pc+1];
 	instruct[15:8] <= instruction_mem[pc+2];
 	instruct[7:0] <= instruction_mem[pc+3];
+	$display("in %b", instruction_mem[pc]);
 
 end
 endmodule // InstructionMemory

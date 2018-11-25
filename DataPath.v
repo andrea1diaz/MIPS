@@ -138,7 +138,7 @@ module DataPath();
 	$dumpvars(0, DataPath);
 	$display("DataPath Test");
 
-		$readmemh("instruct_mem.txt", instruct_memory);
+		$readmemb("instruct_mem.txt", instruct_memory);
 		add_pc = 32'h00000004;
 		pc = 8'h00000000;
 
