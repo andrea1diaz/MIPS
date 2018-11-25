@@ -12,6 +12,7 @@
 `include "ShiftLeft2.v"
 `include "ShiftLeft2_25.v"
 `include "SignExtend.v"
+`include "PC.v"
 
 module DataPath();
 	reg clk, rst;
@@ -26,7 +27,8 @@ module DataPath();
 	reg [5:0] op_5_0;
 	reg [25:0] op_25_0;
 
-	reg [31:0] add_pc;
+	wire [7:0] pc_increment;
+	wire [31:0] target_pc;
 	wire [31:0] pc_result_4;
 	wire [31:0] pc_result_shift;
 	wire [31:0] pc_result_jump;
@@ -85,24 +87,44 @@ module DataPath();
 	//Unicos
 	wire and_unico;
 
+
+	//Asign inicial de wires
+	assign pc_increment = 8'h04;
+
+	//Encargado de hacer los cambios al PC
+	PC(clk, pc, target_pc);
+
+	//Union de shiftLeftJump a los 4 bits de la instruccion
 	JoinShiftJump join_shift_jump(shift_out, instruction[31:28], shift_join);
-	ShiftLeft2 shift_jump(op_25_0, shift_out);
-	ShiftLeft2 shift_left(extend_32, shift_2);
+	
+	//Shift de 26 a 28 para usar instruct en jump
+	ShiftLeft2 shiftLeftJump(op_25_0, shift_out);
+	
+	//Shift left sumar al PC una direccion
+	ShiftLeft2 shiftLeftAdder(extend_32, shift_2);
 
-	Mux mux_32_jump(shift_join, pc_result_jump, instruction, Jump);
+	//Mux para ver si se ejecuta jump o no
+	Mux muxJump(shift_join, pc_result_jump, target_pc, Jump);
 
-	Mux_5 mux_5(op_20_16, op_15_11, mux_5_result, RegistroDestino);
+	//Mux 5 para las instrucciones de write register
+	Mux_5 muxWriteReg(op_20_16, op_15_11, mux_5_result, RegistroDeestino);
 
-	Mux mux_32(readData2, extend_32, mux_32_result, mux_32_select);
+	//Mux que lee del  register  y el sign extende y va al ALU
+	Mux muxALU(readData2, extend_32, mux_32_result, mux_32_select);
 
-	AND and_u(Branch, branch_res, and_unico);
-
+	//And de Branch (Control) y el resultado de la ALU para jump		
+	AND andControl(Branch, branch_res, and_unico);
+	
+	//Mux final antes del PC counter
 	Mux mux_32_pc(pc_result_shift, pc_result_4, pc_result_jump, and_u_unico);
 
+	//Extiende el signo de 16 a 32bits
 	SignExtend sign_extend(clk, op_15_0, extend_32);
 
-	Add add_pc_4(pc, add_pc, pc_result_4);
+	//Adder para incrementar el PC 
+	Add_Single adderTargetPC(pc_increment, target_pc);
 
+	//
 	Add add_pc_shift(pc_result_4, shift_2, pc_result_shift);
 
 	InstructionMemory inst_mem(clk, rst, pc, instruction);
@@ -136,8 +158,6 @@ module DataPath();
 	$dumpfile("DataPath.vcd");
 	$dumpvars(0, DataPath);
 	$display("DataPath Test");
-		add_pc = 32'h00000004;
-		pc = 8'h00000000;
 
 		clk = 0;
 		#10
@@ -154,7 +174,7 @@ module DataPath();
 
 
 
-	always@(pc) begin
+	always@(*) begin
 		op_31_26 <= instruction[31:26];
 		op_25_21 <= instruction[25:21];
 		op_20_16 <= instruction[20:16];
