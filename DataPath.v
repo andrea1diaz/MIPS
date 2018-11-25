@@ -75,7 +75,7 @@ module DataPath();
 	wire [31:0] extend_32;
 
 	//Variable InstructionMemory
-	wire [31:0] instruction;
+	reg [31:0] instruction;
 
 	//Variable DataMemory
 	reg [7:0] data_memory [1023:0];
@@ -139,8 +139,6 @@ module DataPath();
 		add_pc = 32'h00000004;
 		pc = 8'h00000000;
 
-		clk = 1;
-		#10
 		clk = 0;
 		#10
 		clk = 1;
@@ -148,6 +146,8 @@ module DataPath();
 		clk = 0;
 		#10
 		clk = 1;
+		#10
+		clk = 0;
 
 	end
 
