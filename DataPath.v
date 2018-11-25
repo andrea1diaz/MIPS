@@ -75,7 +75,7 @@ module DataPath();
 	wire [31:0] extend_32;
 
 	//Variable InstructionMemory
-	reg [31:0] instruction;
+	wire [31:0] instruction;
 
 	//Variable DataMemory
 	reg [7:0] data_memory [1023:0];

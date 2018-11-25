@@ -8,4 +8,3 @@ always@(opt1 or opt2 or select) begin
 	out = select ? opt1 : opt2;
 end
 endmodule
- : 
