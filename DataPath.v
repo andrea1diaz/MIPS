@@ -124,23 +124,29 @@ module DataPath();
 	//Adder para incrementar el PC 
 	Add_Single adderTargetPC(pc_increment, target_pc);
 
-	//
+	// nose que hace
 	Add add_pc_shift(pc_result_4, shift_2, pc_result_shift);
 
+	//Modulo encargado de recoger la instruccion
 	InstructionMemory inst_mem(clk, rst, pc, instruction);
 
+	//Operaciones aritmeticas
 	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
 
+	//Encrgado de los registros, leer y escribir
 	Register register(clk, rst, readRegister1, readRegister2, mux_5_result,
 					 readData1, readData2, readDataMemory,
 					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc);
 
+	//Control con flags para otros modulos
 	CONTROL control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
 					 RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump);
 
+	//Control con flags para el ALU
 	ALUControl alu_control(clk, rst, ALUOpcode, ALUControl, op_5_0);
 
 
+	//Encargado de manejar la memoria
 	DataMemory data_mem(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite, readDataMemory);
 
 	integer i;
