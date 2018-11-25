@@ -93,7 +93,7 @@ module DataPath();
 	assign pc_increment = 8'h04;
 
 	//Encargado de hacer los cambios al PC
-	PC(clk, pc, target_pc);
+	PC pc_module(clk, pc, target_pc);
 
 	//Union de shiftLeftJump a los 4 bits de la instruccion
 	JoinShiftJump join_shift_jump(shift_out, instruction[31:28], shift_join);
