@@ -1,16 +1,17 @@
-include "ADD.v";
-include "AND.v";
-include "ALU.v";
-include "ALUControl.v";
-include "CONTROL.v";
-include "InstructionMemory.v";
-include "JoinShiftJump.v";
-include "DataMemory.v";
-include "Mux.v";
-include "Register.v";
-include "ShiftLeft2.v";
-include "ShiftLeft2_25.v";
-include "SignExtend.v";
+`include "ADD.v"
+`include "AND.v"
+`include "ALU.v"
+`include "ALUControl.v"
+`include "CONTROL.v"
+`include "InstructionMemory.v"
+`include "JoinShiftJump.v"
+`include "DataMemory.v"
+`include "Mux.v"
+`include "Mux_5.v"
+`include "Register.v"
+`include "ShiftLeft2.v"
+`include "ShiftLeft2_25.v"
+`include "SignExtend.v"
 
 module DataPath();
 	reg clk, rst;
@@ -74,23 +75,23 @@ module DataPath();
 	wire [31:0] extend_32;
 
 	//Variable InstructionMemory
-	reg [7:0] instruct_memory [255:0];
+	reg [7:0] instruct_memory [1023:0];
 	wire [31:0] instruction;
 
 	//Variable DataMemory
-	reg [7:0] data_memory [255:0];
+	reg [7:0] data_memory [1023:0];
 	wire [31:0] readDataMemory;
 
 
 	//Unicos
 	wire and_unico;
 
-	JoinShiftJump join_shift_jump(shift_out, instruction[31:28], shift_join);	
+	JoinShiftJump join_shift_jump(shift_out, instruction[31:28], shift_join);
 	ShiftLeft2 shift_jump(op_25_0, shift_out);
 	ShiftLeft2 shift_left(extend_32, shift_2);
 
 	Mux mux_32_jump(shift_join, pc_result_jump, instruction, Jump);
-	
+
 	Mux_5 mux_5(op_20_16, op_15_11, mux_5_result, RegistroDestino);
 
 	Mux mux_32(readData2, extend_32, mux_32_result, mux_32_select);
@@ -107,11 +108,11 @@ module DataPath();
 
 	InstructionMemory inst_mem(clk, rst, pc, instruction);
 
-	ALU alu(ck, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
+	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
 
 	Register register(clk, rst, readRegister1, readRegister2, mux_5_result,
 					 readData1, readData2, readDataMemory,
-					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc); 
+					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc);
 
 	CONTROL control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
 					 RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump);
@@ -123,26 +124,47 @@ module DataPath();
 
 	integer i;
 	initial begin
-		for( i = 0; i < 32; i = i + 1 ) begin
-    			reg_file[ i ] = 32'h00000000;
-    			data_memory[i] = 32'h00000000;
-    		end
+		for( i = 0; i < 1024; i = i + 1 ) begin
+					data_memory[ i ] = 8'h00;
+				end
+		for(i = 0;i < 32;i = i + 1) begin
+				 reg_file[i] = 32'h00000000;
+		end
 	end
 
 	initial begin
+
+	$dumpfile("DataPath.vcd");
+	$dumpvars(0, DataPath);
+	$display("DataPath Test");
+
 		$readmemh("instruct_mem.txt", instruct_memory);
-		clk = 1; //TODO agregar cambios al clock
 		add_pc = 32'h00000004;
 		pc = 8'h00000000;
+
+		clk = 1;
+		#10
+		clk = 0;
+		#10
+		clk = 1;
+		#10
+		clk = 0;
+		#10
+		clk = 1;
+		$display("ins %b", instruct_memory[0]);
+
 	end
+
+
+
 
 	always@(pc) begin
 		op_31_26 <= instruction[31:26];
-		op_25_21 <= instruction[25:21]; 
+		op_25_21 <= instruction[25:21];
 		op_20_16 <= instruction[20:16];
 		op_15_11 <= instruction[15:11];
 		op_15_0 <= instruction[15:0];
-		op_25_0 <= instruction[25_0];
-		op_5_0 <= instruction[5_0];
+		op_25_0 <= instruction[25:0];
+		op_5_0 <= instruction[5:0];
 	end
 endmodule

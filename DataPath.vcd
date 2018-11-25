@@ -1,0 +1,300 @@
+$date
+	Sun Nov 25 10:52:10 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module DataPath $end
+$var wire 1 ! and_u_unico $end
+$var wire 32 " instruction [31:0] $end
+$var wire 1 # mux_32_select $end
+$var wire 5 $ readRegister1 [4:0] $end
+$var wire 5 % readRegister2 [4:0] $end
+$var wire 32 & shift_join [31:0] $end
+$var wire 28 ' shift_out [27:0] $end
+$var wire 32 ( shift_2 [31:0] $end
+$var wire 32 ) readDataMemory [31:0] $end
+$var wire 32 * readData2 [31:0] $end
+$var wire 32 + readData1 [31:0] $end
+$var wire 32 , pc_result_shift [31:0] $end
+$var wire 32 - pc_result_jump [31:0] $end
+$var wire 32 . pc_result_4 [31:0] $end
+$var wire 5 / mux_5_result [4:0] $end
+$var wire 32 0 mux_32_result [31:0] $end
+$var wire 32 1 extend_32 [31:0] $end
+$var wire 1 2 branch_res $end
+$var wire 1 3 and_unico $end
+$var wire 1 4 RegistroDestino $end
+$var wire 1 5 RegisterWrite $end
+$var wire 1 6 MemoryWrite $end
+$var wire 1 7 MemoryToRegister $end
+$var wire 1 8 MemoryRead $end
+$var wire 1 9 Jump $end
+$var wire 1 : Branch $end
+$var wire 1 ; ALUSrc $end
+$var wire 32 < ALUResult [31:0] $end
+$var wire 2 = ALUOpcode [1:0] $end
+$var wire 4 > ALUControl [3:0] $end
+$var reg 32 ? add_pc [31:0] $end
+$var reg 1 @ clk $end
+$var reg 16 A op_15_0 [15:0] $end
+$var reg 5 B op_15_11 [4:0] $end
+$var reg 5 C op_20_16 [4:0] $end
+$var reg 26 D op_25_0 [25:0] $end
+$var reg 5 E op_25_21 [4:0] $end
+$var reg 5 F op_31_26 [4:0] $end
+$var reg 6 G op_5_0 [5:0] $end
+$var reg 8 H pc [7:0] $end
+$var reg 1 I rst $end
+$var integer 32 J i [31:0] $end
+$scope module add_pc_4 $end
+$var wire 32 K A [31:0] $end
+$var wire 32 L ADDout [31:0] $end
+$var wire 32 M B [31:0] $end
+$var wire 32 N temp [31:0] $end
+$upscope $end
+$scope module add_pc_shift $end
+$var wire 32 O A [31:0] $end
+$var wire 32 P ADDout [31:0] $end
+$var wire 32 Q temp [31:0] $end
+$var wire 32 R B [31:0] $end
+$upscope $end
+$scope module alu $end
+$var wire 1 @ clk $end
+$var wire 1 I rst $end
+$var wire 32 S B [31:0] $end
+$var wire 4 T ALUcontrol [3:0] $end
+$var wire 32 U A [31:0] $end
+$var reg 32 V ALUresult [31:0] $end
+$var reg 33 W temp [32:0] $end
+$var reg 1 2 zero $end
+$upscope $end
+$scope module alu_control $end
+$var wire 1 @ clk $end
+$var wire 6 X op_5_0 [5:0] $end
+$var wire 1 I rst $end
+$var wire 2 Y ALUOpcode [1:0] $end
+$var reg 4 Z ALUControl [3:0] $end
+$upscope $end
+$scope module and_u $end
+$var wire 1 2 B $end
+$var wire 1 3 out $end
+$var wire 1 : A $end
+$upscope $end
+$scope module control $end
+$var wire 32 [ Opcode [31:0] $end
+$var wire 1 @ clk $end
+$var wire 1 I rst $end
+$var reg 2 \ ALUOpcode [1:0] $end
+$var reg 1 ; ALUSrc $end
+$var reg 1 : Branch $end
+$var reg 1 9 Jump $end
+$var reg 1 8 MemoryRead $end
+$var reg 1 7 MemoryToRegister $end
+$var reg 1 6 MemoryWrite $end
+$var reg 1 5 RegisterWrite $end
+$var reg 1 4 RegistroDestino $end
+$var reg 2 ] state [1:0] $end
+$upscope $end
+$scope module data_mem $end
+$var wire 32 ^ ALUResult [31:0] $end
+$var wire 1 8 MemoryRead $end
+$var wire 1 6 MemoryWrite $end
+$var wire 1 @ clk $end
+$var wire 1 I rst $end
+$var wire 32 _ read_data [31:0] $end
+$var reg 32 ` readDataMemory [31:0] $end
+$upscope $end
+$scope module inst_mem $end
+$var wire 1 @ clk $end
+$var wire 8 a pc [7:0] $end
+$var wire 1 I rst $end
+$var reg 32 b instruct [31:0] $end
+$upscope $end
+$scope module join_shift_jump $end
+$var wire 32 c Joined [31:0] $end
+$var wire 4 d Last4 [3:0] $end
+$var wire 28 e Shifted [27:0] $end
+$upscope $end
+$scope module mux_32 $end
+$var wire 1 # select $end
+$var wire 32 f opt2 [31:0] $end
+$var wire 32 g opt1 [31:0] $end
+$var reg 32 h out [31:0] $end
+$upscope $end
+$scope module mux_32_jump $end
+$var wire 32 i opt1 [31:0] $end
+$var wire 1 9 select $end
+$var wire 32 j opt2 [31:0] $end
+$var reg 32 k out [31:0] $end
+$upscope $end
+$scope module mux_32_pc $end
+$var wire 32 l opt1 [31:0] $end
+$var wire 32 m opt2 [31:0] $end
+$var wire 1 ! select $end
+$var reg 32 n out [31:0] $end
+$upscope $end
+$scope module mux_5 $end
+$var wire 5 o opt1 [4:0] $end
+$var wire 5 p opt2 [4:0] $end
+$var wire 1 4 select $end
+$var wire 5 q out [4:0] $end
+$upscope $end
+$scope module register $end
+$var wire 1 ; ALUSrc $end
+$var wire 1 : Branch $end
+$var wire 1 7 MemoryToRegister $end
+$var wire 1 6 MemoryWrite $end
+$var wire 1 5 RegisterWrite $end
+$var wire 1 @ clk $end
+$var wire 5 r readRegister1 [4:0] $end
+$var wire 5 s readRegister2 [4:0] $end
+$var wire 1 I rst $end
+$var wire 32 t writeBack [31:0] $end
+$var wire 5 u writeRegister [4:0] $end
+$var reg 32 v readData1 [31:0] $end
+$var reg 32 w readData2 [31:0] $end
+$var integer 32 x i [31:0] $end
+$upscope $end
+$scope module shift_jump $end
+$var wire 32 y in [31:0] $end
+$var wire 32 z out [31:0] $end
+$upscope $end
+$scope module shift_left $end
+$var wire 32 { out [31:0] $end
+$var wire 32 | in [31:0] $end
+$upscope $end
+$scope module sign_extend $end
+$var wire 1 @ clk $end
+$var wire 16 } in [15:0] $end
+$var reg 32 ~ out [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b0xxxxxxxxxxxxxxxx ~
+bx }
+b0xxxxxxxxxxxxxxxx |
+b0xxxxxxxxxxxxxxxx00 {
+b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 z
+b0xxxxxxxxxxxxxxxxxxxxxxxxxx y
+bx x
+bx w
+bx v
+bx u
+bx t
+bz s
+bz r
+bx q
+bx p
+bx o
+bx n
+bx m
+bx l
+bx k
+bx j
+b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 i
+bx h
+bx g
+b0xxxxxxxxxxxxxxxx f
+bx00 e
+bx d
+b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 c
+bx b
+b0 a
+bx `
+bx _
+bx ^
+b0 ]
+b0 \
+bx [
+bx Z
+b0 Y
+bx X
+bx W
+bx V
+bx U
+bx T
+bx S
+b0xxxxxxxxxxxxxxxx00 R
+bx Q
+bx P
+bx O
+bx N
+b100 M
+bx L
+bx K
+b100000 J
+xI
+b0 H
+bx G
+bx F
+bx E
+bx D
+bx C
+bx B
+bx A
+1@
+b100 ?
+bx >
+b0 =
+bx <
+0;
+0:
+09
+08
+07
+06
+05
+04
+03
+x2
+b0xxxxxxxxxxxxxxxx 1
+bx 0
+bx /
+bx .
+bx -
+bx ,
+bx +
+bx *
+bx )
+b0xxxxxxxxxxxxxxxx00 (
+bx00 '
+b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 &
+bz %
+bz $
+z#
+bx "
+z!
+$end
+#10
+b0xxxxxxxxxxxxxxxx 1
+b0xxxxxxxxxxxxxxxx f
+b0xxxxxxxxxxxxxxxx |
+b0xxxxxxxxxxxxxxxx ~
+0@
+#20
+b0xxxxxxxxxxxxxxxx 1
+b0xxxxxxxxxxxxxxxx f
+b0xxxxxxxxxxxxxxxx |
+b0xxxxxxxxxxxxxxxx ~
+b10 >
+b10 T
+b10 Z
+1@
+#30
+b0xxxxxxxxxxxxxxxx 1
+b0xxxxxxxxxxxxxxxx f
+b0xxxxxxxxxxxxxxxx |
+b0xxxxxxxxxxxxxxxx ~
+0@
+#40
+b0xxxxxxxxxxxxxxxx 1
+b0xxxxxxxxxxxxxxxx f
+b0xxxxxxxxxxxxxxxx |
+b0xxxxxxxxxxxxxxxx ~
+1@
