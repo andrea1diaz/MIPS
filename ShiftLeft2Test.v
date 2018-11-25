@@ -1,3 +1,4 @@
+`include "ShiftLeft2.v"
 module ShiftLeft2Test();
     reg [31:0] in;
     reg [31:0] out;
@@ -16,10 +17,10 @@ module ShiftLeft2Test();
 
 	for(test_vals = 0;test_vals < 8;test_vals = test_vals + 1) begin
 		in[3:0] = test_vals;
-		#5 
+		#5
 		$display("in = %dOutput = %d",
- 		int, out); 
+ 		int, out);
 	end
-	
-    end	
+
+    end
 endmodule

@@ -1,3 +1,4 @@
+
 module DataMemory (clk, rst, ALUResult, read_data, MemoryRead, MemoryWrite, readDataMemory);
 	input wire clk, rst;
 	input wire MemoryRead, MemoryWrite;

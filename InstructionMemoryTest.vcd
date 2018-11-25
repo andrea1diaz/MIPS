@@ -1,0 +1,32 @@
+$date
+	Sat Nov 24 18:39:18 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module InstructionMemoryTest $end
+$var wire 32 ! instruct [31:0] $end
+$var reg 1 " clk $end
+$var reg 8 # pc [7:0] $end
+$var reg 1 $ rst $end
+$scope module instMemTest $end
+$var wire 1 " clk $end
+$var wire 8 % pc [7:0] $end
+$var wire 1 $ rst $end
+$var reg 32 & instruct [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx &
+b0 %
+0$
+b0 #
+1"
+bx !
+$end
+#5

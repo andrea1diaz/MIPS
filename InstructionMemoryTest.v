@@ -1,7 +1,9 @@
+`include "InstructionMemory.v"
+
 module InstructionMemoryTest();
     reg clk, rst;
     reg [7:0] pc;
-    reg [31:0] instruct;
+    wire [31:0] instruct;
     reg [7:0] instruct_memory [0:255];
 
     InstructionMemory instMemTest(clk, rst, pc, instruct);
@@ -16,9 +18,9 @@ module InstructionMemoryTest();
 
 	pc = 8'b00000000;
 
-	#5 
+	#5
 	$display("PC = %d, Instruct = %d",
- 		pc, instruct); 
-	
-    end	
+ 		pc, instruct);
+
+    end
 endmodule

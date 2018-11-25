@@ -1,0 +1,51 @@
+$date
+	Sat Nov 24 18:46:43 2018
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module DataMemoryTest $end
+$var wire 32 ! readDataMemory [31:0] $end
+$var reg 32 " ALUResult [31:0] $end
+$var reg 1 # MemoryRead $end
+$var reg 1 $ MemoryWrite $end
+$var reg 1 % clk $end
+$var reg 32 & read_data [31:0] $end
+$var reg 1 ' rst $end
+$scope module dataTest $end
+$var wire 32 ( ALUResult [31:0] $end
+$var wire 1 # MemoryRead $end
+$var wire 1 $ MemoryWrite $end
+$var wire 1 % clk $end
+$var wire 32 ) read_data [31:0] $end
+$var wire 1 ' rst $end
+$var reg 32 * readDataMemory [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx *
+bx )
+b11111111111111111111111111111111 (
+0'
+bx &
+1%
+1$
+1#
+b11111111111111111111111111111111 "
+bx !
+$end
+#5
+0%
+#10
+b0x0000000x0000000x0000000x !
+b0x0000000x0000000x0000000x *
+1%
+#15
+0#
+0$
+#20

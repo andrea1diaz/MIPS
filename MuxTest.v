@@ -20,7 +20,7 @@ module MuxTest();
 		{in1[0],in2[1],select} = test_vals[2:0];
 		#5
 		$display("in0 = %d, in1 = %d, select = %b. Output = %d",
- 		out0, out1, select, out);
+ 		in1, in2, select, out);
 	end
 
     end
