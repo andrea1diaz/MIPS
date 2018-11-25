@@ -1,4 +1,4 @@
-`include "ADD.v"
+`include "Add.v"
 `include "AND.v"
 `include "ALU.v"
 `include "ALUControl.v"
@@ -75,7 +75,6 @@ module DataPath();
 	wire [31:0] extend_32;
 
 	//Variable InstructionMemory
-	reg [7:0] instruct_memory [1023:0];
 	wire [31:0] instruction;
 
 	//Variable DataMemory
@@ -102,9 +101,9 @@ module DataPath();
 
 	SignExtend sign_extend(clk, op_15_0, extend_32);
 
-	ADD add_pc_4(instruction, add_pc, pc_result_4);
+	Add add_pc_4(instruction, add_pc, pc_result_4);
 
-	ADD add_pc_shift(pc_result_4, shift_2, pc_result_shift);
+	Add add_pc_shift(pc_result_4, shift_2, pc_result_shift);
 
 	InstructionMemory inst_mem(clk, rst, pc, instruction);
 
@@ -137,8 +136,6 @@ module DataPath();
 	$dumpfile("DataPath.vcd");
 	$dumpvars(0, DataPath);
 	$display("DataPath Test");
-
-		$readmemb("instruct_mem.txt", instruct_memory);
 		add_pc = 32'h00000004;
 		pc = 8'h00000000;
 

@@ -4,7 +4,7 @@ module InstructionMemoryTest();
     reg clk, rst;
     reg [7:0] pc;
     wire [31:0] instruct;
-    reg [7:0] instruct_memory [0:255];
+
 
     InstructionMemory instMemTest(clk, rst, pc, instruct);
 
@@ -17,6 +17,10 @@ module InstructionMemoryTest();
 	rst = 1'b0;
 
 	pc = 8'b00000000;
+
+	#5 clk = 1'b0;
+	#5 clk = 1'b1;
+	
 
 	#5
 	$display("PC = %d, Instruct = %d",
