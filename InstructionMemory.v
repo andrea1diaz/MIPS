@@ -8,8 +8,13 @@ initial begin
 	$readmemb("instruct_mem.txt", instruction_mem);
 end
 
-
+integer i;
 always@(posedge clk) begin
+	if(rst) begin
+		for(i = 0;i < 1024;i = i + 1) begin
+			instruction_mem[ i ] = 0;
+		end
+	end
 	instruct <= {
 		instruction_mem[pc],
 		instruction_mem[pc+1],

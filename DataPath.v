@@ -101,7 +101,7 @@ module DataPath();
 
 	SignExtend sign_extend(clk, op_15_0, extend_32);
 
-	Add add_pc_4(instruction, add_pc, pc_result_4);
+	Add add_pc_4(pc, add_pc, pc_result_4);
 
 	Add add_pc_shift(pc_result_4, shift_2, pc_result_shift);
 
@@ -124,10 +124,10 @@ module DataPath();
 	integer i;
 	initial begin
 		for( i = 0; i < 1024; i = i + 1 ) begin
-					data_memory[ i ] = 8'h00;
-				end
+			data_memory[ i ] = 8'h00;
+		end
 		for(i = 0;i < 32;i = i + 1) begin
-				 reg_file[i] = 32'h00000000;
+			 reg_file[i] = 32'h00000000;
 		end
 	end
 
@@ -148,7 +148,6 @@ module DataPath();
 		clk = 0;
 		#10
 		clk = 1;
-		$display("ins %b", instruct_memory[0]);
 
 	end
 

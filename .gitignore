@@ -2,5 +2,7 @@
 *.mpf
 *.mti
 *.vstf
+*.vvp
+*.vcd
 /work
 /Tests
