@@ -131,19 +131,18 @@ module DataPath();
 
 	initial begin
 		$readmemh("instruct_mem.txt", instruct_memory);
-		clk = 0; //TODO agregar cambios al clock
+		clk = 1; //TODO agregar cambios al clock
 		add_pc = 32'h00000004;
-		pc = 32'h00000000;
+		pc = 8'h00000000;
 	end
 
-	always@(pc)
-	begin
-		op_31_26 = instruction[31:26];
-		op_25_21 = instruction[25:21]; 
-		op_20_16 = instruction[20:16];
-		op_15_11 = instruction[15:11];
-		op_15_0 = instruction[15:0];
-		op_25_0 = instruction[25_0];
-		op_5_0 = instruction[5_0];
+	always@(pc) begin
+		op_31_26 <= instruction[31:26];
+		op_25_21 <= instruction[25:21]; 
+		op_20_16 <= instruction[20:16];
+		op_15_11 <= instruction[15:11];
+		op_15_0 <= instruction[15:0];
+		op_25_0 <= instruction[25_0];
+		op_5_0 <= instruction[5_0];
 	end
 endmodule
