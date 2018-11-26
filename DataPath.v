@@ -92,6 +92,17 @@ module DataPath();
 	//Asign inicial de wires
 	assign pc_increment = 8'h04;
 
+
+	integer i;
+	initial begin
+		for( i = 0; i < 1024; i = i + 1 ) begin
+			data_memory[ i ] = 0;
+		end
+		for(i = 0;i < 32;i = i + 1) begin
+			 reg_file[i] = 0;
+		end
+	end
+
 	//Encargado de hacer los cambios al PC
 	PC pc_module(clk, pc, target_pc);
 
@@ -150,15 +161,7 @@ module DataPath();
 	//Encargado de manejar la memoria
 	DataMemory data_mem(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite, readDataMemory);
 
-	integer i;
-	initial begin
-		for( i = 0; i < 1024; i = i + 1 ) begin
-			data_memory[ i ] = 8'h00;
-		end
-		for(i = 0;i < 32;i = i + 1) begin
-			 reg_file[i] = 32'h00000000;
-		end
-	end
+
 
 	initial begin
 
