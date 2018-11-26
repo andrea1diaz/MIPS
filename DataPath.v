@@ -167,7 +167,6 @@ module DataPath();
 	$dumpvars(0, DataPath);
 	$display("DataPath Test");
 
-	$display("receiver: %b", shift_join);
 	end
 
 	always@(instruction) begin
