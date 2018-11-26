@@ -1,9 +1,11 @@
-module InstructionMemory (clk, rst, pc, instruct);
+module InstructionMemory (clk, rst, pc, instruct, clk_out);
 	input [7:0] pc;
 	input clk, rst;
 	reg [7:0] instruction_mem [0:1023];
 	output reg [31:0] instruct;
+	output clk_out;
 
+	assign clk_out = clk;
 initial begin
 	$readmemb("instruct_mem.txt", instruction_mem);
 end

@@ -17,7 +17,7 @@
 
 module DataPath();
 	reg clk, rst;
-	wire [7:0] pc;
+	wire [31:0] pc;
 
 	//Variables generales
 	reg [4:0] op_31_26;
@@ -88,14 +88,9 @@ module DataPath();
 	//Unicos
 	wire and_unico;
 
-
-	//Asign inicial de wires
-	assign pc_increment = 8'h04;
-	assign target_pc = 0;
-
-
 	integer i;
 	initial begin
+		assign target_pc = 32'h4;
 		for( i = 0; i < 1024; i = i + 1 ) begin
 			data_memory[ i ] = 0;
 		end
@@ -110,9 +105,6 @@ module DataPath();
 
 	//Encargado de hacer los cambios al PC
 	PC pc_module(clk, pc, target_pc);
-
-	//Adder para incrementar el PC
-	Add_Single adderTargetPC(pc_increment, target_pc);
 
 	//Union de shiftLeftJump a los 4 bits de la instruccion
 	JoinShiftJump join_shift_jump(shift_out, instruction[31:28], shift_join);
@@ -139,7 +131,7 @@ module DataPath();
 	Mux mux_32_pc(pc_result_shift, target_pc, pc_result_jump, and_u_unico);
 
 	//Extiende el signo de 16 a 32bits
-	SignExtend sign_extend(clk, op_15_0, extend_32);
+	SignExtend sign_extend(op_15_0, extend_32);
 
 	// nose que hace
 	Add add_pc_shift(target_pc, shift_2, pc_result_shift);

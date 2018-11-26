@@ -1,12 +1,14 @@
 module Register(clk, rst, readRegister1, readRegister2, writeRegister,
 					 readData1, readData2, writeBack,
-					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc);
+					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc, clk_out);
 input wire clk, rst;
 input wire [31:0] writeBack;
 input wire RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc;
 input wire [4:0] readRegister1, readRegister2, writeRegister;
 output reg [31:0] readData1, readData2;
 reg [31:0] reg_file [31:0];
+output clk_out;
+assign clk_out = clk;
 
 integer i;
 always@(posedge clk)

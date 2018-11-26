@@ -1,4 +1,4 @@
-module ALU (clk, rst, A, B, zero, ALUresult, ALUcontrol);
+module ALU (clk, rst, A, B, zero, ALUresult, ALUcontrol, clk_out);
   output reg zero;
   output reg [31:0] ALUresult;
   input [31:0] A;
@@ -7,6 +7,8 @@ module ALU (clk, rst, A, B, zero, ALUresult, ALUcontrol);
   input clk;
   input rst;
   reg [32:0] temp;
+  output clk_out;
+  assign clk_out = clk;
 
   always @ (posedge clk) begin
     case (ALUcontrol)

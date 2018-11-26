@@ -1,4 +1,4 @@
-module DataMemory (clk, rst, ALUResult, read_data, MemoryRead, MemoryWrite, readDataMemory);
+module DataMemory (clk, rst, ALUResult, read_data, MemoryRead, MemoryWrite, readDataMemory, clk_out);
 	input wire clk, rst;
 	input wire MemoryRead, MemoryWrite;
 	input wire [31:0] ALUResult;
