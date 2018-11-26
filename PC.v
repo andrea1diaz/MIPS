@@ -7,6 +7,6 @@ module PC(clk, pc, target_pc);
 		pc = 32'b0;
 	end
 	always @ (posedge clk) begin
-		pc = target_pc;
+		pc = target_pc + pc;
 	end
 endmodule

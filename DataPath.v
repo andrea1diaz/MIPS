@@ -91,7 +91,7 @@ module DataPath();
 
 	//Asign inicial de wires
 	assign pc_increment = 8'h04;
-	assign target_pc = 32'h0;
+	assign target_pc = 0;
 
 
 	integer i;
@@ -103,6 +103,10 @@ module DataPath();
 			 reg_file[i] = 0;
 		end
 	end
+
+
+	//readData2 extendData2
+
 
 	//Encargado de hacer los cambios al PC
 	PC pc_module(clk, pc, target_pc);
@@ -132,13 +136,13 @@ module DataPath();
 	AND andControl(Branch, branch_res, and_unico);
 
 	//Mux final antes del PC counter
-	Mux mux_32_pc(pc_result_shift, pc_result_4, pc_result_jump, and_u_unico);
+	Mux mux_32_pc(pc_result_shift, target_pc, pc_result_jump, and_u_unico);
 
 	//Extiende el signo de 16 a 32bits
 	SignExtend sign_extend(clk, op_15_0, extend_32);
 
 	// nose que hace
-	Add add_pc_shift(pc_result_4, shift_2, pc_result_shift);
+	Add add_pc_shift(target_pc, shift_2, pc_result_shift);
 
 	//Modulo encargado de recoger la instruccion
 	InstructionMemory inst_mem(clk, rst, pc, instruction);
