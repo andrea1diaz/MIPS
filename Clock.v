@@ -3,9 +3,11 @@ output reg clk;
 
 initial begin
 	clk = 0;
-	#5 clk = ~clk;
-	#5 clk = ~clk;
-	#5 clk = ~clk;
+end
+
+initial #20 $finish();
+
+always begin
 	#5 clk = ~clk;
 end
 

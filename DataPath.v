@@ -109,12 +109,8 @@ module DataPath();
 	//Encargado de hacer los cambios al PC
 	PC pc_module(clk, pc, target_pc);
 
-	//Shift de 26 a 28 para usar instruct en jump
-	ShiftLeft2 shiftLeftJump(op_25_0, target_pc_alter);
-
-	//Union de shiftLeftJump a los 4 bits de la instruccion
-	JoinShiftJump join_shift_jump(target_pc_alter, instruction[31:28], target_pc_alter);
-
+	assign target_pc_alter = {instruction[31:28], 2'b00, op_25_0};
+	
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 shiftLeftAdder(extend_32, shift_2);
 
