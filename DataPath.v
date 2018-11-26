@@ -107,7 +107,8 @@ module DataPath();
 	PC PCModule(clk, pc);
 
 	//Join para el jump
-	JoinShiftJump joinShiftJ(instruction[31:28], {2'b00, op_25_0}, target_pc_alter);
+	JoinShiftJump JoinShiftJump(instruction[31:28], {2'b00, op_25_0},
+															target_pc_alter);
 
 
 	//Shift left sumar al PC una direccion
@@ -120,44 +121,46 @@ module DataPath();
 	Mux MuxPCAdder(target_pc_im, target_pc, target_pc, and_u_unico);
 
 	// Adder shift 2 y PC
-	Add addPCAndImmediate(target_pc, shift_2, target_pc_im);
+	Add AddPCAndImmediate(target_pc, shift_2, target_pc_im);
 
 	//Mux 5 para las instrucciones de write register
-	Mux_5 muxWriteReg(op_20_16, op_15_11, mux_5_result, RegistroDeestino);
+	Mux_5 MuxWriteReg(op_20_16, op_15_11, mux_5_result, RegistroDeestino);
 
 	//Mux que lee del  register  y el sign extende y va al ALU
-	Mux muxALU(readData2, extend_32, mux_32_result, ALUSrc);
+	Mux MuxALU(readData2, extend_32, mux_32_result, ALUSrc);
 
 	//And de Branch (Control) y el resultado de la ALU para jump
-	AND andControl(Branch, branch_res, and_unico);
+	AND AndControl(Branch, branch_res, and_unico);
 
 
 
 	//Extiende el signo de 16 a 32bits
-	SignExtend sign_extend(op_15_0, extend_32);
+	SignExtend SignExtend(op_15_0, extend_32);
 
 
 	//Modulo encargado de recoger la instruccion
 	InstructionMemory InstructionMemory(clk, rst, pc, instruction);
 
 	//Operaciones aritmeticas
-	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
+	ALU ALU(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
 
 	//Encrgado de los registros, leer y escribir
-	Register register(clk, rst, readRegister1, readRegister2, mux_5_result,
+	Register Register(clk, rst, readRegister1, readRegister2, mux_5_result,
 					 readData1, readData2, readDataMemory,
 					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc);
 
 	//Control con flags para otros modulos
-	CONTROL control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
-					 RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump);
+	CONTROL Control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite,
+									RegisterWrite, RegistroDestino, MemoryToRegister, MemoryRead,
+									Branch, Jump);
 
 	//Control con flags para el ALU
-	ALUControl alu_control(clk, rst, ALUOpcode, ALUControl, op_5_0);
+	ALUControl ALUControl(clk, rst, ALUOpcode, ALUControl, op_5_0);
 
 
 	//Encargado de manejar la memoria
-	DataMemory data_mem(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite, readDataMemory);
+	DataMemory DataMemory(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite,
+												readDataMemory);
 
 
 
