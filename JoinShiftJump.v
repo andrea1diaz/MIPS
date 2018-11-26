@@ -1,9 +1,9 @@
-module JoinShiftJump(Shifted, Last4, Joined);
-	input [27:0] Shifted;
-	input [3:0] Last4;
-	output [31:0] Joined;
+module JoinShiftJump(last_4, op_code_25, joined);
+	input wire [27:0] op_code_25;
+	input wire [3:0] last_4;
+	output reg [31:0] joined;
 
-	assign Joined[31:28] = Last4;
-	assign Joined[27:0] = Shifted;
-	
+always@(*) begin
+	joined = {last_4, op_code_25};
+end
 endmodule
