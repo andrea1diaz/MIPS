@@ -1,7 +1,7 @@
 module InstructionMemory (clk, rst, pc, instruct);
 	input [31:0] pc;
 	input clk, rst;
-	reg [7:0] instruction_mem [0:1023];
+	reg [7:0] instruction_mem [0:255];
 	output reg [31:0] instruct;
 
 initial begin

@@ -3,11 +3,11 @@ module DataMemory (clk, rst, ALUResult, read_data, MemoryRead, MemoryWrite, read
 	input wire MemoryRead, MemoryWrite;
 	input wire [31:0] ALUResult;
 	input wire [31:0] read_data;
-	reg [7:0] data_memory [1023:0];
+	reg [7:0] data_memory [0:255];
 	output reg [31:0] readDataMemory;
 
 initial begin
-	$readmemb("data_memory.txt", data_memory);	
+	$readmemb("data_memory.txt", data_memory);
 end
 
 always@ (posedge clk)begin

@@ -111,9 +111,8 @@ module DataPath();
 	//Encargado de hacer los cambios al PC
 	PC PCModule(clk, pc, target_pc);
 
-
 	assign target_pc_alter = {instruction[31:28], 2'b00, op_25_0};
-	
+
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 shiftLeftAdder(extend_32, shift_2);
 
