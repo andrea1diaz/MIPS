@@ -91,6 +91,7 @@ module DataPath();
 
 	//Asign inicial de wires
 	assign pc_increment = 8'h04;
+	assign target_pc = 32'h0;
 
 
 	integer i;
@@ -105,6 +106,9 @@ module DataPath();
 
 	//Encargado de hacer los cambios al PC
 	PC pc_module(clk, pc, target_pc);
+
+	//Adder para incrementar el PC
+	Add_Single adderTargetPC(pc_increment, target_pc);
 
 	//Union de shiftLeftJump a los 4 bits de la instruccion
 	JoinShiftJump join_shift_jump(shift_out, instruction[31:28], shift_join);
@@ -132,9 +136,6 @@ module DataPath();
 
 	//Extiende el signo de 16 a 32bits
 	SignExtend sign_extend(clk, op_15_0, extend_32);
-
-	//Adder para incrementar el PC
-	Add_Single adderTargetPC(pc_increment, target_pc);
 
 	// nose que hace
 	Add add_pc_shift(pc_result_4, shift_2, pc_result_shift);
@@ -169,6 +170,8 @@ module DataPath();
 	$dumpvars(0, DataPath);
 	$display("DataPath Test");
 
+	$display("receiver: %b", shift_join);
+
 		clk = 0;
 		#1
 		clk = 1;
@@ -184,9 +187,6 @@ module DataPath();
 		clk = 0;
 
 	end
-
-
-
 
 	always@(*) begin
 		op_31_26 <= instruction[31:26];

@@ -1,5 +1,5 @@
 $date
-	Sun Nov 25 19:13:04 2018
+	Sun Nov 25 20:36:58 2018
 $end
 $version
 	Icarus Verilog
@@ -202,10 +202,10 @@ bx o
 bx n
 bx m
 bx l
-b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 k
+bx k
 bx j
 b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 i
-bx h
+b0xxxxxxxxxxxxxxxx h
 bx g
 b0xxxxxxxxxxxxxxxx f
 bx00 e
@@ -227,7 +227,7 @@ bx V
 bx U
 bx T
 bx S
-bx R
+b0xxxxxxxxxxxxxxxx R
 bx Q
 b100 P
 b0xxxxxxxxxxxxxxxx00 O
@@ -259,7 +259,7 @@ bx ?
 x5
 b0xxxxxxxxxxxxxxxx 4
 bx 3
-bx 2
+b0xxxxxxxxxxxxxxxx 2
 bx 1
 b0 0
 bx /
@@ -279,7 +279,6 @@ z"
 z!
 $end
 #1
-b0x0000x00000000000x000010100 k
 b0x0000x00000000000x000010100 '
 b0x0000x00000000000x000010100 c
 b0x0000x00000000000x000010100 i
@@ -317,13 +316,13 @@ b0xxxxxxxxxxxxxxxx |
 b0xxxxxxxxxxxxxxxx ""
 1B
 #2
-b101 2
-b101 R
-b101 h
 1>
 b10100 *
 b10100 O
 b10100 {
+bx 2
+bx R
+bx h
 b1 \
 b101 4
 b101 f
@@ -349,7 +348,6 @@ bx E
 bx l
 bx G
 bx H
-b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 k
 b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 '
 b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 c
 b0xxxxxxxxxxxxxxxxxxxxxxxxxx00 i
@@ -357,9 +355,9 @@ bx d
 bx 3
 bx Z
 bx a
-bx 2
-bx R
-bx h
+b101 2
+b101 R
+b101 h
 0>
 b0 \
 b101 4
@@ -371,6 +369,9 @@ b101 ""
 b0xxxxxxxxxxxxxxxx00 *
 b0xxxxxxxxxxxxxxxx00 O
 b0xxxxxxxxxxxxxxxx00 {
+b0xxxxxxxxxxxxxxxx 2
+b0xxxxxxxxxxxxxxxx R
+b0xxxxxxxxxxxxxxxx h
 b0xxxxxxxxxxxxxxxx 4
 b0xxxxxxxxxxxxxxxx f
 b0xxxxxxxxxxxxxxxx |
