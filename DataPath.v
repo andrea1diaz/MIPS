@@ -155,7 +155,7 @@ module DataPath();
 									Branch, Jump);
 
 	//Control con flags para el ALU
-	ALUControl ALUControl(clk, rst, ALUOpcode, ALUControl, op_5_0);
+	ALUControl ALUcontrol(clk, rst, ALUOpcode, ALUControl, op_5_0);
 
 
 	//Encargado de manejar la memoria
