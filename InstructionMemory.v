@@ -16,10 +16,10 @@ always@(posedge clk) begin
 		end
 	end
 	instruct <= {
-		instruction_mem[pc[31:24]],
-		instruction_mem[pc[23:16]],
-		instruction_mem[pc[15:8]],
-		instruction_mem[pc[7:0]]
+		instruction_mem[pc],
+		instruction_mem[pc + 1],
+		instruction_mem[pc + 2],
+		instruction_mem[pc + 3]
 	};
 
 end

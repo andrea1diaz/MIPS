@@ -114,13 +114,13 @@ module DataPath();
 	assign target_pc_alter = {instruction[31:28], 2'b00, op_25_0};
 
 	//Shift left sumar al PC una direccion
-	ShiftLeft2 shiftLeftAdder(extend_32, shift_2);
+	ShiftLeft2 ShiftLeftAdder(extend_32, shift_2);
 
 	//Mux para ver si se ejecuta jump o no
-	Mux muxJump(target_pc_alter, target_pc, target_pc, Jump);
+	Mux MuxJump(target_pc_alter, target_pc, target_pc, Jump);
 
 	//Mux antes del mux Jump
-	Mux muxPCAdder(target_pc_im, target_pc, target_pc, and_u_unico);
+	Mux MuxPCAdder(target_pc_im, target_pc, target_pc, and_u_unico);
 
 	// Adder shift 2 y PC
 	Add addPCAndImmediate(target_pc, shift_2, target_pc_im);
@@ -141,7 +141,7 @@ module DataPath();
 
 
 	//Modulo encargado de recoger la instruccion
-	InstructionMemory inst_mem(clk, rst, pc, instruction);
+	InstructionMemory InstructionMemory(clk, rst, pc, instruction);
 
 	//Operaciones aritmeticas
 	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
