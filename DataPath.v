@@ -13,10 +13,11 @@
 `include "ShiftLeft2_25.v"
 `include "SignExtend.v"
 `include "PC.v"
+`include "Clock.v"
 `include "Add_Single.v"
 
 module DataPath();
-	reg clk, rst;
+	wire clk, rst;
 	wire [31:0] pc;
 
 	//Variables generales
@@ -87,10 +88,10 @@ module DataPath();
 
 	//Unicos
 	wire and_unico;
+	assign target_pc = 32'h4;
 
 	integer i;
 	initial begin
-		assign target_pc = 32'h4;
 		for( i = 0; i < 1024; i = i + 1 ) begin
 			data_memory[ i ] = 0;
 		end
@@ -101,7 +102,9 @@ module DataPath();
 
 
 	//readData2 extendData2
-
+	
+	//Clock modulo
+	Clock(clk);
 
 	//Encargado de hacer los cambios al PC
 	PC pc_module(clk, pc, target_pc);
@@ -137,26 +140,26 @@ module DataPath();
 	Add add_pc_shift(target_pc, shift_2, pc_result_shift);
 
 	//Modulo encargado de recoger la instruccion
-	InstructionMemory inst_mem(clk, rst, pc, instruction);
+	InstructionMemory inst_mem(clk, rst, pc, instruction, clk_out);
 
 	//Operaciones aritmeticas
-	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
+	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl), clk_out;
 
 	//Encrgado de los registros, leer y escribir
 	Register register(clk, rst, readRegister1, readRegister2, mux_5_result,
 					 readData1, readData2, readDataMemory,
-					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc);
+					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc, clk_out);
 
 	//Control con flags para otros modulos
 	CONTROL control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
-					 RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump);
+					 RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump, clk_out);
 
 	//Control con flags para el ALU
-	ALUControl alu_control(clk, rst, ALUOpcode, ALUControl, op_5_0);
+	ALUControl alu_control(clk, rst, ALUOpcode, ALUControl, op_5_0, clk_out);
 
 
 	//Encargado de manejar la memoria
-	DataMemory data_mem(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite, readDataMemory);
+	DataMemory data_mem(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite, readDataMemory, clk_out);
 
 
 
@@ -167,21 +170,6 @@ module DataPath();
 	$display("DataPath Test");
 
 	$display("receiver: %b", shift_join);
-
-		clk = 0;
-		#1
-		clk = 1;
-		#1
-		clk = 0;
-		#1
-		clk = 1;
-		#1
-		clk = 0;
-		#1
-		clk = 1;
-		#1
-		clk = 0;
-
 	end
 
 	always@(*) begin
