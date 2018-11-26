@@ -104,7 +104,7 @@ module DataPath();
 	//readData2 extendData2
 	
 	//Clock modulo
-	Clock(clk);
+	Clock clk(clk);
 
 	//Encargado de hacer los cambios al PC
 	PC pc_module(clk, pc, target_pc);
@@ -140,26 +140,26 @@ module DataPath();
 	Add add_pc_shift(target_pc, shift_2, pc_result_shift);
 
 	//Modulo encargado de recoger la instruccion
-	InstructionMemory inst_mem(clk, rst, pc, instruction, clk_out);
+	InstructionMemory inst_mem(clk, rst, pc, instruction, clk);
 
 	//Operaciones aritmeticas
-	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl), clk_out;
+	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl, clk);
 
 	//Encrgado de los registros, leer y escribir
 	Register register(clk, rst, readRegister1, readRegister2, mux_5_result,
 					 readData1, readData2, readDataMemory,
-					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc, clk_out);
+					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc, clk);
 
 	//Control con flags para otros modulos
 	CONTROL control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
-					 RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump, clk_out);
+					 RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump, clk);
 
 	//Control con flags para el ALU
-	ALUControl alu_control(clk, rst, ALUOpcode, ALUControl, op_5_0, clk_out);
+	ALUControl alu_control(clk, rst, ALUOpcode, ALUControl, op_5_0, clk);
 
 
 	//Encargado de manejar la memoria
-	DataMemory data_mem(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite, readDataMemory, clk_out);
+	DataMemory data_mem(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite, readDataMemory, clk);
 
 
 

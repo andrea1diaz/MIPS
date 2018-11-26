@@ -5,7 +5,8 @@ module DataMemory (clk, rst, ALUResult, read_data, MemoryRead, MemoryWrite, read
 	input wire [31:0] read_data;
 	reg [7:0] data_memory [1023:0];
 	output reg [31:0] readDataMemory;
-
+    output wire clk_out;
+    assign clk_out = clk;
 
 initial begin
 	$readmemb("data_memory.txt", data_memory);	
