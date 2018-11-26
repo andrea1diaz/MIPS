@@ -17,7 +17,7 @@
 
 module DataPath();
 	reg clk, rst;
-	reg [7:0] pc;
+	wire [7:0] pc;
 
 	//Variables generales
 	reg [4:0] op_31_26;
@@ -97,10 +97,10 @@ module DataPath();
 
 	//Union de shiftLeftJump a los 4 bits de la instruccion
 	JoinShiftJump join_shift_jump(shift_out, instruction[31:28], shift_join);
-	
+
 	//Shift de 26 a 28 para usar instruct en jump
 	ShiftLeft2 shiftLeftJump(op_25_0, shift_out);
-	
+
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 shiftLeftAdder(extend_32, shift_2);
 
@@ -111,18 +111,18 @@ module DataPath();
 	Mux_5 muxWriteReg(op_20_16, op_15_11, mux_5_result, RegistroDeestino);
 
 	//Mux que lee del  register  y el sign extende y va al ALU
-	Mux muxALU(readData2, extend_32, mux_32_result, mux_32_select);
+	Mux muxALU(readData2, extend_32, mux_32_result, ALUSrc);
 
-	//And de Branch (Control) y el resultado de la ALU para jump		
+	//And de Branch (Control) y el resultado de la ALU para jump
 	AND andControl(Branch, branch_res, and_unico);
-	
+
 	//Mux final antes del PC counter
 	Mux mux_32_pc(pc_result_shift, pc_result_4, pc_result_jump, and_u_unico);
 
 	//Extiende el signo de 16 a 32bits
 	SignExtend sign_extend(clk, op_15_0, extend_32);
 
-	//Adder para incrementar el PC 
+	//Adder para incrementar el PC
 	Add_Single adderTargetPC(pc_increment, target_pc);
 
 	// nose que hace
@@ -167,13 +167,17 @@ module DataPath();
 	$display("DataPath Test");
 
 		clk = 0;
-		#10
+		#1
 		clk = 1;
-		#10
+		#1
 		clk = 0;
-		#10
+		#1
 		clk = 1;
-		#10
+		#1
+		clk = 0;
+		#1
+		clk = 1;
+		#1
 		clk = 0;
 
 	end

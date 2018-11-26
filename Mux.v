@@ -5,6 +5,7 @@ input select;
 output reg [31:0] out;
 
 always@(opt1 or opt2 or select) begin
-	out = select ? opt1 : opt2;
+	out = select ? opt2 : opt1;
+	$display("opt1: %b, opt2: %b", opt1, opt2);
 end
 endmodule
