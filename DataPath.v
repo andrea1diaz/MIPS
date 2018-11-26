@@ -31,9 +31,9 @@ module DataPath();
 
 	wire [7:0] pc_increment;
 	wire [31:0] target_pc;
-	wire [31:0] pc_result_4;
-	wire [31:0] pc_result_shift;
-	wire [31:0] pc_result_jump;
+	wire [31:0] target_pc_alter;
+	wire [31:0] target_pc_im;
+
 
 	//Variable Shift
 	wire [27:0] shift_out;
@@ -88,7 +88,7 @@ module DataPath();
 
 	//Unicos
 	wire and_unico;
-	assign target_pc = 32'h4;
+	assign target_pc = 32'h00000004;
 
 	integer i;
 	initial begin
@@ -107,19 +107,25 @@ module DataPath();
 	Clock clok(clk);
 
 	//Encargado de hacer los cambios al PC
-	PC pc_module(clk, pc, target_pc, clk);
-
-	//Union de shiftLeftJump a los 4 bits de la instruccion
-	JoinShiftJump join_shift_jump(shift_out, instruction[31:28], shift_join);
+	PC pc_module(clk, pc, target_pc);
 
 	//Shift de 26 a 28 para usar instruct en jump
-	ShiftLeft2 shiftLeftJump(op_25_0, shift_out);
+	ShiftLeft2 shiftLeftJump(op_25_0, target_pc_alter);
+
+	//Union de shiftLeftJump a los 4 bits de la instruccion
+	JoinShiftJump join_shift_jump(target_pc_alter, instruction[31:28], target_pc_alter);
 
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 shiftLeftAdder(extend_32, shift_2);
 
 	//Mux para ver si se ejecuta jump o no
-	Mux muxJump(shift_join, pc_result_jump, target_pc, Jump);
+	Mux muxJump(target_pc_alter, target_pc, target_pc, Jump);
+
+	//Mux antes del mux Jump 
+	Mux muxPCAdder(target_pc_im, target_pc, target_pc, and_u_unico);
+
+	// Adder shift 2 y PC
+	Add addPCAndImmediate(target_pc, shift_2, target_pc_im);
 
 	//Mux 5 para las instrucciones de write register
 	Mux_5 muxWriteReg(op_20_16, op_15_11, mux_5_result, RegistroDeestino);
@@ -130,36 +136,33 @@ module DataPath();
 	//And de Branch (Control) y el resultado de la ALU para jump
 	AND andControl(Branch, branch_res, and_unico);
 
-	//Mux final antes del PC counter
-	Mux mux_32_pc(pc_result_shift, target_pc, pc_result_jump, and_u_unico);
+
 
 	//Extiende el signo de 16 a 32bits
 	SignExtend sign_extend(op_15_0, extend_32);
 
-	// nose que hace
-	Add add_pc_shift(target_pc, shift_2, pc_result_shift);
 
 	//Modulo encargado de recoger la instruccion
-	InstructionMemory inst_mem(clk, rst, pc, instruction, clk);
+	InstructionMemory inst_mem(clk, rst, pc, instruction);
 
 	//Operaciones aritmeticas
-	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl, clk);
+	ALU alu(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
 
 	//Encrgado de los registros, leer y escribir
 	Register register(clk, rst, readRegister1, readRegister2, mux_5_result,
 					 readData1, readData2, readDataMemory,
-					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc, clk);
+					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc);
 
 	//Control con flags para otros modulos
 	CONTROL control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
-					 RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump, clk);
+					 RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump);
 
 	//Control con flags para el ALU
-	ALUControl alu_control(clk, rst, ALUOpcode, ALUControl, op_5_0, clk);
+	ALUControl alu_control(clk, rst, ALUOpcode, ALUControl, op_5_0);
 
 
 	//Encargado de manejar la memoria
-	DataMemory data_mem(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite, readDataMemory, clk);
+	DataMemory data_mem(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite, readDataMemory);
 
 
 
@@ -172,7 +175,7 @@ module DataPath();
 	$display("receiver: %b", shift_join);
 	end
 
-	always@(*) begin
+	always@(instruction) begin
 		op_31_26 <= instruction[31:26];
 		op_25_21 <= instruction[25:21];
 		op_20_16 <= instruction[20:16];

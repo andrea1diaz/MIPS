@@ -3,13 +3,10 @@ output reg clk;
 
 initial begin
 	clk = 0;
-end
-integer i;
-always begin
-	for(i = 0;i < 5;i = i +1) begin
-		#5 clk <= ~clk;
-	end
-	$finish();
+	#5 clk = ~clk;
+	#5 clk = ~clk;
+	#5 clk = ~clk;
+	#5 clk = ~clk;
 end
 
 endmodule

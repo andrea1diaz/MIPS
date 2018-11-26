@@ -1,5 +1,5 @@
 module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
-           RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump, clk_out);
+           RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump);
   
 
   input [31:0] Opcode;
@@ -13,8 +13,6 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
   output reg [0:0]MemoryWrite;
   output reg ALUSrc;
   output reg RegisterWrite;
-  output clk_out;
-  assign clk_out = clk;
 
   reg [1:0]state;
 
