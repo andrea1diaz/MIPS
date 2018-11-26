@@ -89,6 +89,8 @@ module DataPath();
 	//Unicos
 	wire and_unico;
 	assign target_pc = 32'h00000004;
+	assign target_pc_alter = 32'h00000004;
+	assign target_pc_im = 32'h00000004;
 
 	integer i;
 	initial begin
@@ -102,15 +104,15 @@ module DataPath();
 
 
 	//readData2 extendData2
-	
+
 	//Clock modulo
-	Clock clok(clk);
+	Clock Clock(clk);
 
 	//Encargado de hacer los cambios al PC
-	PC pc_module(clk, pc, target_pc);
+	PC PCModule(clk, pc, target_pc);
 
 	//Shift de 26 a 28 para usar instruct en jump
-	ShiftLeft2 shiftLeftJump(op_25_0, target_pc_alter);
+	ShiftLeft2 ShiftLeftJump(op_25_0, target_pc_alter);
 
 	//Union de shiftLeftJump a los 4 bits de la instruccion
 	JoinShiftJump join_shift_jump(target_pc_alter, instruction[31:28], target_pc_alter);
@@ -121,7 +123,7 @@ module DataPath();
 	//Mux para ver si se ejecuta jump o no
 	Mux muxJump(target_pc_alter, target_pc, target_pc, Jump);
 
-	//Mux antes del mux Jump 
+	//Mux antes del mux Jump
 	Mux muxPCAdder(target_pc_im, target_pc, target_pc, and_u_unico);
 
 	// Adder shift 2 y PC
