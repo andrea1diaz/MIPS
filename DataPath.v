@@ -104,10 +104,10 @@ module DataPath();
 	//readData2 extendData2
 	
 	//Clock modulo
-	Clock clk(clk);
+	Clock clok(clk);
 
 	//Encargado de hacer los cambios al PC
-	PC pc_module(clk, pc, target_pc);
+	PC pc_module(clk, pc, target_pc, clk);
 
 	//Union de shiftLeftJump a los 4 bits de la instruccion
 	JoinShiftJump join_shift_jump(shift_out, instruction[31:28], shift_join);
