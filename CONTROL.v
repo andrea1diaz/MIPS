@@ -16,23 +16,11 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
 
   reg [3:0]state;
 
-  parameter S0=0, S1=1, S2=2, S3=3, S4=4, S5=5, S6=6, S7=7, S8=8, S9=9;
+  parameter S1=1, S2=2, S3=3, S4=4, S5=5, S6=6, S7=7, S8=8, S9=9, S10=10);
 
 
   always @ (state or Opcode) begin
     case (state)
-      S0: begin // fetch instruction
-        RegistroDestino = 1'b0;
-        Jump = 1'b0;
-        Branch = 1'b0;
-        MemoryRead = 1'b0;
-        MemoryToRegister = 1'b0;
-        ALUOpcode = 2'b00;
-        MemoryWrite = 1'b0;
-        ALUSrc = 1'b0;
-        RegisterWrite = 1'b0;
-      end
-
       S1: begin // lw || sw || ORi || ANDi
         RegistroDestino = 1'b0;
         Jump = 1'b0;
@@ -89,7 +77,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
               ALUOpcode = 2'b10;
               MemoryWrite = 1'b0;
               ALUSrc = 1'b0;
-              RegisterWrite = 1'b0;
+              RegisterWrite = 1'b1;
 	    end
             S6: begin // op R-type
               RegistroDestino = 1'b1;
@@ -135,32 +123,46 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
               ALUSrc = 1'b0;
               RegisterWrite = 1'b0;
 	    end
+
+      S10: begin // jal
+        RegistroDestino = 1'b0;
+        Jump = 1'b1;
+        Branch = 1'b0;
+        MemoryRead = 1'b0;
+        MemoryToRegister = 1'b0;
+        ALUOpcode = 2'b00;
+        MemoryWrite = 1'b0;
+        ALUSrc = 1'b0;
+        RegisterWrite = 1'b0;
+      end
+
   endcase
   end
 
   always @ (clk or Opcode) begin
+    if (Opcode[31:26] == 6'b100011 || Opcode[31:26] == 6'b101011 ||
+        Opcode[31:26] == 6'b001100 || Opcode[31:26] == 6'b001101 ||
+        Opcode[31:26] == 6'b001010 || Opcode[31:26] == 6'b100000 ||
+        Opcode[31:26] == 6'b100001 || Opcode[31:26] == 6'b101000 ||
+        Opcode[31:26] == 6'b101001)
+      state = S1;
+
+    if (Opcode[31:26] == 6'b000000) //sll (wtf?)
+      state = S6;
+
+    if (Opcode[31:26] == 6'b001000)
+      state = S4;
+
+    if (Opcode[31:26] == 6'b000100 || Opcode[31:26] == 6'b000101 ||
+        Opcode[31:26] == 6'b000111)
+      state = S7;
+
+    if (Opcode[31:26] == 6'b000010) // jump
+      state = S9;
+
+    if (Opcode[31:26] == 6'b000011) // jal
+
     case (state)
-      S0: begin
-        if (Opcode[31:26] == 6'b100011 || Opcode[31:26] == 6'b101011 ||
-            Opcode[31:26] == 6'b001100 || Opcode[31:26] == 6'b001101 ||
-            Opcode[31:26] == 6'b001010 || Opcode[31:26] == 6'b100000 ||
-            Opcode[31:26] == 6'b100001 || Opcode[31:26] == 6'b101000 ||
-            Opcode[31:26] == 6'b101001)
-          state = S1;
-
-        if (Opcode[31:26] == 6'b000000) //sll (wtf?)
-          state = S6;
-
-        if (Opcode[31:26] == 6'b001000)
-          state = S4;
-
-        if (Opcode[31:26] == 6'b000100 || Opcode[31:26] == 6'b000101 ||
-            Opcode[31:26] == 6'b000111)
-          state = S7;
-
-        if (Opcode[31:26] == 6'b000010) // jump
-          state = S9;
-	    end
       // I - type op
       S1: begin
         if (Opcode[31:26] == 6'b100011) // load word
@@ -192,11 +194,12 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
 
         if (Opcode[31:26] == 6'b001010) // slti
           state = S4;
+      end
 
-	end
       S5: begin
         state = S6;
-	end
+      end
+
       S7: begin
         if (Opcode[31:26] == 6'b000100) // beq
           state = S8; //TODO
@@ -206,9 +209,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
 
         if (Opcode[31:26] == 6'b000111) // bgtz
           state = S8; //TODO
-	end
-      default:
-        state = S0;
+	      end
     endcase
   end
 

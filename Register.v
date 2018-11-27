@@ -25,15 +25,15 @@ module Register(clk, rst, readRegister1, readRegister2, writeRegister,
 		end
 	end
 
-	always@(clk or readRegister1) begin
+	always@(posedge clk or readRegister1) begin
 			readData1 = reg_file[readRegister1];
 	end
 
-	always@(clk or readRegister2) begin
-			readData2 => reg_file[readRegister2];
+	always@(posedge clk or readRegister2) begin
+			readData2 = reg_file[readRegister2];
 	end
 
-	always @ (posedge clk or writeBack or writeRegister) begin
+	always @ (negedge clk or writeBack or writeRegister) begin
 		if(RegisterWrite) begin
 			reg_file[writeRegister] <= writeBack;
 		end
