@@ -4,9 +4,9 @@ module ALUControl (clk, rst, ALUOpcode, ALUControl, op_5_0);
   input [5:0] op_5_0;
   input clk, rst;
 
-  always @ (posedge clk) begin
+  always @ (posedge clk or ALUOpcode) begin
     if (ALUOpcode == 2'b00) ALUControl = 4'b0010; // load word - store word - addi
-    if (ALUOpcode == 2'bx1) ALUControl = 4'b0110; // branch equal - bnq - subi
+    if (ALUOpcode == 2'b01) ALUControl = 4'b0110; // branch equal - bnq - subi
     if (ALUOpcode == 2'b10) begin
         case (op_5_0[3:0])
           4'b0000:

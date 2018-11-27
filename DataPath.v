@@ -18,7 +18,7 @@
 
 module DataPath();
 	wire clk, rst;
-	wire [31:0] pc;
+
 
 	//Variables generales
 	reg [4:0] op_31_26;
@@ -29,10 +29,10 @@ module DataPath();
 	reg [5:0] op_5_0;
 	reg [25:0] op_25_0;
 
+	//Wires PC
+	wire [31:0] pc;
 	wire [7:0] pc_increment;
 	wire [31:0] target_pc;
-	wire [31:0] target_pc_alter;
-	wire [31:0] target_pc_im;
 
 
 	//Variable Shift
@@ -87,6 +87,9 @@ module DataPath();
 	reg [7:0] data_memory [1023:0];
 	wire [31:0] readDataMemory;
 
+	//Jump
+	wire[31:0] jal;
+
 
 	//Unicos
 	wire and_unico;
@@ -111,8 +114,6 @@ module DataPath();
 	//Join para el jump
 	JoinShiftJump JoinShiftJump(instruction[31:28], {2'b00, op_25_0},
 															target_pc_alter);
-
-
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 ShiftLeftAdder(extend_32, shift_2);
 

@@ -8,7 +8,7 @@ module ALU (clk, rst, A, B, zero, ALUresult, ALUcontrol);
   input rst;
   reg [32:0] temp;
 
-  always @ (posedge clk) begin
+  always @ (posedge clk or ALUcontrol) begin
     case (ALUcontrol)
       4'b0000: //AND
         ALUresult = A & B;
@@ -16,10 +16,9 @@ module ALU (clk, rst, A, B, zero, ALUresult, ALUcontrol);
         ALUresult = A | B;
       4'b0010: begin //add
         if( A+B > 32'hFFFFFFFF) begin
-
           temp = A+B;
           ALUresult = temp[31:0];
-	         end
+	      end
         else begin
           ALUresult = A + B;
 	         end
