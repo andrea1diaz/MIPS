@@ -10,7 +10,6 @@
 `include "Mux_5.v"
 `include "Register.v"
 `include "ShiftLeft2.v"
-`include "ShiftLeft2_25.v"
 `include "SignExtend.v"
 `include "PC.v"
 `include "Clock.v"
@@ -31,8 +30,8 @@ module DataPath();
 
 	//Wires PC
 	wire [31:0] pc;
-	wire [7:0] pc_increment;
 	wire [31:0] target_pc;
+	wire [31:0] target_pc_im;
 
 
 	//Variable Shift
@@ -59,6 +58,8 @@ module DataPath();
 	wire [1:0] ALUOpcode;
 	wire ALUSrc;
 	wire RegisterWrite;
+	wire Jal;
+	wire Jr;
 
 	//Variables ALU
 	wire [31:0] A, B;
@@ -89,7 +90,7 @@ module DataPath();
 
 	//Jump
 	wire [31:0] jal;
-	wire [27:0] jump_shiftleft_result;
+	wire [31:0] aluResultJump;
 
 
 	//Unicos
@@ -106,32 +107,34 @@ module DataPath();
 	end
 
 
+
+	/////Modulos por resolver
+	//Join para el jump
+	JoinShiftJump JoinShiftJump(instruction[31:28], instruction[25:0], target_pc_im);
+
+	//Mux para ver si se ejecuta jump o no
+	//Mux MuxJump(target_pc_im, target_pc, target_pc, Jump);
+
+	// Adder shift 2 y PC
+	Add AddPCAndImmediate(target_pc, shift_2, shift_2);
+
+	//Mux antes del mux Jump
+	//Mux MuxPCAdder(target_pc, shift_2, aluResultJump, Branch);
+
+
+	//// Operaciones resueltas
+
 	//Clock modulo
 	Clock Clock(clk);
 
 	//Encargado de hacer los cambios al PC
 	PC PCModule(clk, pc);
 
-	//Join para el jump
-	JoinShiftJump JoinShiftJump(instruction[31:28], jump_shiftleft_result,
-															target_pc);
-
-	ShiftLeft2Jump ShiftLeft2Jump(op_25_0, jump_shiftleft_result);
-
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 ShiftLeftAdder(extend_32, shift_2);
 
-	//Mux para ver si se ejecuta jump o no
-	Mux MuxJump(target_pc, target_pc, target_pc, Jump);
-
-	//Mux antes del mux Jump
-	Mux MuxPCAdder(target_pc_im, target_pc, target_pc, Branch);
-
 	//Mux de MemtoReg
 	Mux MuxMemtoReg(ALUResult, readDataMemory, mux_mem_to_reg, MemoryToRegister);
-
-	// Adder shift 2 y PC
-	Add AddPCAndImmediate(target_pc, shift_2, target_pc_im);
 
 	//Mux 5 para las instrucciones de write register
 	Mux_5 MuxRegDst(op_20_16, op_15_11, mux_5_result, RegistroDestino);
@@ -158,7 +161,7 @@ module DataPath();
 	//Control con flags para otros modulos
 	CONTROL Control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite,
 									RegisterWrite, RegistroDestino, MemoryToRegister, MemoryRead,
-									Branch, Jump);
+									Branch, Jump, Jal, Jr);
 
 	//Control con flags para el ALU
 	ALUControl ALUcontrol(clk, rst, ALUOpcode, ALUControl, op_5_0);
