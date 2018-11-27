@@ -88,7 +88,8 @@ module DataPath();
 	wire [31:0] readDataMemory;
 
 	//Jump
-	wire[31:0] jal;
+	wire [31:0] jal;
+	wire [27:0] jump_shiftleft_result;
 
 
 	//Unicos
@@ -112,8 +113,11 @@ module DataPath();
 	PC PCModule(clk, pc);
 
 	//Join para el jump
-	JoinShiftJump JoinShiftJump(instruction[31:28], {2'b00, op_25_0},
-															target_pc_alter);
+	JoinShiftJump JoinShiftJump(instruction[31:28], jump_shiftleft_result,
+															target_pc);
+
+	ShiftLeft2Jump ShiftLeft2Jump(op_25_0, jump_shiftleft_result);
+
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 ShiftLeftAdder(extend_32, shift_2);
 
@@ -121,7 +125,7 @@ module DataPath();
 	Mux MuxJump(target_pc, target_pc, target_pc, Jump);
 
 	//Mux antes del mux Jump
-	Mux MuxPCAdder(target_pc_im, target_pc, target_pc, and_u_unico);
+	Mux MuxPCAdder(target_pc_im, target_pc, target_pc, Branch);
 
 	//Mux de MemtoReg
 	Mux MuxMemtoReg(ALUResult, readDataMemory, mux_mem_to_reg, MemoryToRegister);
@@ -138,11 +142,8 @@ module DataPath();
 	//And de Branch (Control) y el resultado de la ALU para jump
 	AND AndControl(Branch, branch_res, and_unico);
 
-
-
 	//Extiende el signo de 16 a 32bits
 	SignExtend SignExtend(op_15_0, extend_32);
-
 
 	//Modulo encargado de recoger la instruccion
 	InstructionMemory InstructionMemory(clk, rst, pc, instruction);

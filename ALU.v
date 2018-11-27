@@ -15,8 +15,8 @@ module ALU (clk, rst, A, B, zero, ALUresult, ALUcontrol);
       4'b0001: //OR
         ALUresult = A | B;
       4'b0010: begin //add
-        if( A+B > 32'hFFFFFFFF) begin
-          temp = A+B;
+        if( A + B > 32'hFFFFFFFF) begin
+          temp = A + B;
           ALUresult = temp[31:0];
 	      end
         else begin

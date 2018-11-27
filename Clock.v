@@ -5,10 +5,10 @@ initial begin
 	clk = 0;
 end
 
-initial #50 $finish();
+initial #60 $finish();
 
 always begin
-	#5 clk = ~clk;
+	#3 clk = ~clk;
 end
 
 endmodule
