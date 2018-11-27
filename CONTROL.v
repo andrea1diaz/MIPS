@@ -1,6 +1,6 @@
 module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
            RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump);
-  
+
 
   input [31:0] Opcode;
   input wire clk, rst;
@@ -14,12 +14,12 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
   output reg ALUSrc;
   output reg RegisterWrite;
 
-  reg [1:0]state;
+  reg [3:0]state;
 
   parameter S0=0, S1=1, S2=2, S3=3, S4=4, S5=5, S6=6, S7=7, S8=8, S9=9;
 
   always @(state) begin
-          case (state) 
+          case (state)
             S0: begin // fetch instruction
               RegistroDestino = 1'b0;
               Jump = 1'b0;
@@ -31,7 +31,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
               ALUSrc = 1'b0;
               RegisterWrite = 1'b0;
 	   end
-	
+
             S1: begin // lw || sw || addi || ORi || ANDi
               RegistroDestino = 1'b0;
               Jump = 1'b0;
@@ -72,7 +72,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
               MemoryRead = 1'b0;
               MemoryToRegister = 1'b0;
               ALUOpcode = 2'b00;
-              MemoryWrite = 1'b0;
+              MemoryWrite = 1'b1;
               ALUSrc = 1'b1;
               RegisterWrite = 1'b1;
 	    end
@@ -94,7 +94,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
               MemoryRead = 1'b0;
               MemoryToRegister = 1'b0;
               ALUOpcode = 2'b10;
-              MemoryWrite = 1'b0;
+              MemoryWrite = 1'b1;
               ALUSrc = 1'b0;
               RegisterWrite = 1'b1;
 	    end
@@ -134,7 +134,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
           endcase
      end
 
-  always @ ( state, clk) begin
+  always @ (clk or state) begin
     case (state)
       S0: begin
         if (Opcode[31:26] == 6'b100011 || Opcode[31:26] == 6'b101011 ||

@@ -75,6 +75,8 @@ module DataPath();
 	wire [31:0] mux_32_result;
 	wire mux_32_select;
 
+	wire [31:0] mux_mem_to_reg;
+
 	//Variables SignExtend 16->32
 	wire [31:0] extend_32;
 
@@ -120,6 +122,9 @@ module DataPath();
 	//Mux antes del mux Jump
 	Mux MuxPCAdder(target_pc_im, target_pc, target_pc, and_u_unico);
 
+	//Mux de MemtoReg
+	Mux MuxMemtoReg(ALUResult, readDataMemory, mux_mem_to_reg, MemoryToRegister);
+
 	// Adder shift 2 y PC
 	Add AddPCAndImmediate(target_pc, shift_2, target_pc_im);
 
@@ -145,9 +150,8 @@ module DataPath();
 	ALU ALU(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
 
 	//Encrgado de los registros, leer y escribir
-	Register Register(clk, rst, readRegister1, readRegister2, mux_5_result,
-					 readData1, readData2, readDataMemory,
-					 RegisterWrite, MemoryToRegister, MemoryWrite, Branch, ALUSrc);
+	Register Register(clk, rst, instruction[25:21], instruction[20:16], mux_5_result,
+					 readData1, readData2, mux_mem_to_reg, RegisterWrite);
 
 	//Control con flags para otros modulos
 	CONTROL Control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite,
