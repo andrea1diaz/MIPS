@@ -134,7 +134,7 @@ module DataPath();
 	Add AddPCAndImmediate(target_pc, shift_2, target_pc_im);
 
 	//Mux 5 para las instrucciones de write register
-	Mux_5 MuxWriteReg(op_20_16, op_15_11, mux_5_result, RegistroDeestino);
+	Mux_5 MuxRegDst(op_20_16, op_15_11, mux_5_result, RegistroDestino);
 
 	//Mux que lee del  register  y el sign extende y va al ALU
 	Mux MuxALU(readData2, extend_32, mux_32_result, ALUSrc);
@@ -179,12 +179,12 @@ module DataPath();
 	end
 
 	always@(instruction) begin
-		op_31_26 <= instruction[31:26];
-		op_25_21 <= instruction[25:21];
-		op_20_16 <= instruction[20:16];
-		op_15_11 <= instruction[15:11];
-		op_15_0 <= instruction[15:0];
-		op_25_0 <= instruction[25:0];
-		op_5_0 <= instruction[5:0];
+		op_31_26 = instruction[31:26];
+		op_25_21 = instruction[25:21];
+		op_20_16 = instruction[20:16];
+		op_15_11 = instruction[15:11];
+		op_15_0 = instruction[15:0];
+		op_25_0 = instruction[25:0];
+		op_5_0 = instruction[5:0];
 	end
 endmodule

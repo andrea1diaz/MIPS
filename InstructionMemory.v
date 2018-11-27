@@ -9,7 +9,7 @@ module InstructionMemory (clk, rst, pc, instruct);
 	end
 
 	integer i;
-	always@(posedge clk) begin
+	always@(pc) begin
 		if(rst) begin
 			for(i = 0;i < 256;i = i + 1) begin
 				instruction_mem[ i ] = 0;
@@ -17,7 +17,7 @@ module InstructionMemory (clk, rst, pc, instruct);
 		end
 
 		else begin
-			instruct <= {
+			instruct = {
 				instruction_mem[pc],
 				instruction_mem[pc + 1],
 				instruction_mem[pc + 2],

@@ -19,7 +19,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
   parameter S0=0, S1=1, S2=2, S3=3, S4=4, S5=5, S6=6, S7=7, S8=8, S9=9;
 
 
-  always @ (*) begin
+  always @ (state or Opcode) begin
     case (state)
       S0: begin // fetch instruction
         RegistroDestino = 1'b0;
@@ -33,7 +33,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
         RegisterWrite = 1'b0;
       end
 
-      S1: begin // lw || sw || addi || ORi || ANDi
+      S1: begin // lw || sw || ORi || ANDi
         RegistroDestino = 1'b0;
         Jump = 1'b0;
         Branch = 1'b0;
@@ -138,18 +138,21 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
   endcase
   end
 
-  always @ (clk) begin
+  always @ (clk or Opcode) begin
     case (state)
       S0: begin
         if (Opcode[31:26] == 6'b100011 || Opcode[31:26] == 6'b101011 ||
-            Opcode[31:26] == 6'b001000 || Opcode[31:26] == 6'b001100 ||
-            Opcode[31:26] == 6'b001101 || Opcode[31:26] == 6'b001010 ||
-            Opcode[31:26] == 6'b100000 || Opcode[31:26] == 6'b100001 ||
-            Opcode[31:26] == 6'b101000 || Opcode[31:26] == 6'b101001)
+            Opcode[31:26] == 6'b001100 || Opcode[31:26] == 6'b001101 ||
+            Opcode[31:26] == 6'b001010 || Opcode[31:26] == 6'b100000 ||
+            Opcode[31:26] == 6'b100001 || Opcode[31:26] == 6'b101000 ||
+            Opcode[31:26] == 6'b101001)
           state = S1;
 
-        if (Opcode[31:26] == 6'b000000) //sll
-          state = S5;
+        if (Opcode[31:26] == 6'b000000) //sll (wtf?)
+          state = S6;
+
+        if (Opcode[31:26] == 6'b001000)
+          state = S4;
 
         if (Opcode[31:26] == 6'b000100 || Opcode[31:26] == 6'b000101 ||
             Opcode[31:26] == 6'b000111)

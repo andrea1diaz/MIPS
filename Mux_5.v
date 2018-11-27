@@ -4,6 +4,6 @@ input wire select;
 input wire [4:0] opt1, opt2;
 output wire [4:0] out;
 
-assign out = select ? opt1 : opt2;
+assign out = select ? opt2 : opt1;
 
 endmodule

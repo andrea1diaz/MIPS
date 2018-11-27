@@ -8,7 +8,11 @@ module ALU (clk, rst, A, B, zero, ALUresult, ALUcontrol);
   input rst;
   reg [32:0] temp;
 
-  always @ (posedge clk or ALUcontrol) begin
+  initial begin
+    zero = 0;
+  end
+
+  always @ (ALUcontrol or A or B or posedge clk) begin
     case (ALUcontrol)
       4'b0000: //AND
         ALUresult = A & B;

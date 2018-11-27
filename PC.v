@@ -6,6 +6,7 @@ module PC(clk, pc);
 	initial  begin
 		pc = 32'b0;
 	end
+	
 	always @ (posedge clk) begin
 		pc = pc + 32'h4;
 	end
