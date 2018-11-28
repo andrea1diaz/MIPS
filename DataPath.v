@@ -92,6 +92,9 @@ module DataPath();
 	wire [31:0] jal;
 	wire [31:0] aluResultJump;
 
+	//Lui
+	wire [31:0] mux_out_lui;
+
 
 	//Unicos
 	wire and_unico;
@@ -139,6 +142,9 @@ module DataPath();
 	//Mux de MemtoReg
 	Mux MuxMemtoReg(ALUResult, readDataMemory, mux_mem_to_reg, MemoryToRegister);
 
+	//LUIControl
+	Mux muxLUI(op_15_0, mux_mem_to_reg, mux_out_ui, LUIctrl);
+
 	//Mux 5 para las instrucciones de write register
 	Mux_5 MuxRegDst(op_20_16, op_15_11, mux_5_result, RegistroDestino);
 
@@ -159,7 +165,7 @@ module DataPath();
 
 	//Encrgado de los registros, leer y escribir
 	Register Register(clk, rst, instruction[25:21], instruction[20:16], mux_5_result,
-					 readData1, readData2, mux_mem_to_reg, RegisterWrite);
+					 readData1, readData2, mux_out_lui, RegisterWrite);
 
 	//Control con flags para otros modulos
 	CONTROL Control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite,
