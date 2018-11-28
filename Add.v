@@ -1,10 +1,11 @@
 module Add (A, B, ADDout);
-  output [31:0]ADDout;
+  output reg [31:0]ADDout;
   input [31:0]A;
   input [31:0]B;
-  wire[31:0] temp;
+  reg[31:0] temp;
   
-  assign temp = A + B;
-  assign ADDout = temp[31:0];
-
+  always@(A or B) begin
+  	temp = A + B;
+  	ADDout = temp[31:0];
+  end
 endmodule

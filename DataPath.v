@@ -111,13 +111,9 @@ module DataPath();
 		end
 	end
 
-
-
-
-
-	/////Modulos por resolver
 	//Join para el jump
 	JoinShiftJump JoinShiftJump(instruction[31:28], instruction[25:0], target_pc_im);
+
 
 	// Adder shift 2 y PC
 	Add AddPCAndImmediate(target_pc, shift_2, shift_2);
@@ -125,21 +121,14 @@ module DataPath();
 	//Mux antes del mux Jump
 	Mux MuxPCAdder(target_pc, shift_2, aluResultJump, Branch);
 
-
-	//Mux para ver si se ejecuta jump o no
-	//Mux MuxJump(aluResultJump, target_pc_im, target_pc_im, Jump);
-
+	//Mux para ver si se ejecuta jump o no y JR
 	Mux_3 MuxJumpJR(aluResultJump, target_pc_im, readData1, target_pc_im, Jump);
-
-	//// Operaciones resueltas
 
 	//Clock modulo
 	Clock Clock(clk);
 
 	//Encargado de hacer los cambios al PC
 	PC PCModule(clk, pc, target_pc_im, Jump, Branch);
-
-
 
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 ShiftLeftAdder(extend_32, shift_2);
@@ -169,8 +158,7 @@ module DataPath();
 	ALU ALU(clk, rst, readData1, mux_32_result, branch_res, ALUResult, ALUControl);
 
 	//Encrgado de los registros, leer y escribir
-	Register Register(clk, rst, instruction[25:21], instruction[20:16], mux_5_result,
-					 readData1, readData2, mux_out_lui, RegisterWrite);
+	Register Register(clk, rst, instruction[25:21], instruction[20:16], mux_5_result,readData1, readData2, mux_out_lui, RegisterWrite);
 
 	//Control con flags para otros modulos
 	CONTROL Control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite,
