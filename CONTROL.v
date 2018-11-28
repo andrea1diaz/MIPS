@@ -207,7 +207,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
     if (Opcode[31:26] == 6'b000011) // jal
       state = S10;
 
-    if (Opcode[31:26] == 6'000000 && Opcode[3:0] == 4'1000) // junior
+    if (Opcode[31:26] == 6'b000000 && Opcode[3:0] == 4'b1000) // junior
       state = S11;
 
 
