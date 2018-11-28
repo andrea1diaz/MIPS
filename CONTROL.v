@@ -78,6 +78,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
         Jal = 1'b0;
         Jr = 1'b0;
 	    end
+
       S5: begin // op R-type
         RegistroDestino = 1'b0;
         Jump = 1'b0;
@@ -91,6 +92,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
         Jal = 1'b0;
         Jr = 1'b0;
 	    end
+
       S6: begin // op R-type
         RegistroDestino = 1'b1;
         Jump = 1'b0;
@@ -104,6 +106,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
         Jal = 1'b0;
         Jr = 1'b0;
 	    end
+
       S7: begin //beq
         RegistroDestino = 1'b0;
         Jump = 1'b0;
@@ -117,6 +120,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
         Jal = 1'b0;
         Jr = 1'b0;
 	    end
+
       S8: begin //beq
         RegistroDestino = 1'bz;
         Jump = 1'b0;
@@ -130,6 +134,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
         Jal = 1'b0;
         Jr = 1'b0;
 	    end
+
       S9: begin //jump
         RegistroDestino = 1'b0;
         Jump = 1'b1;
