@@ -30,11 +30,34 @@ module DataPath();
 	reg [5:0] op_5_0;
 	reg [25:0] op_25_0;
 
+	//Wires InstructionMemory
+	wire [31:0] instruction;
+
 	//Wires PC
 	wire [31:0] pc;
-	wire [31:0] target_pc;
 	wire [31:0] target_pc_im;
 
+	//Wires de CONTROL
+	wire [1:0]Jump;
+	wire [1:0]RegistroDestino;
+	wire Branch;
+	wire MemoryRead;
+	wire [1:0]MemoryToRegister;
+	wire [0:0] MemoryWrite;
+	wire [1:0] ALUOpcode;
+	wire ALUSrc;
+	wire RegisterWrite;
+	wire Jal;
+
+	//Wires ALU
+	wire [31:0] A, B;
+	wire [3:0] ALUControl;
+	wire [31:0] ALUResult;
+	wire branch_res;
+
+	//Variable DataMemory
+	reg [7:0] data_memory [1023:0];
+	wire [31:0] readDataMemory;
 
 	//Variable Shift
 	wire [27:0] shift_out;
@@ -50,24 +73,6 @@ module DataPath();
 	wire[31:0] readData1;
 	wire[31:0] readData2;
 
-	//Variables de CONTROL
-	wire [1:0]Jump;
-	wire [1:0]RegistroDestino;
-	wire Branch;
-	wire MemoryRead;
-	wire [1:0]MemoryToRegister;
-	wire [0:0] MemoryWrite;
-	wire [1:0] ALUOpcode;
-	wire ALUSrc;
-	wire RegisterWrite;
-	wire Jal;
-
-	//Variables ALU
-	wire [31:0] A, B;
-	wire [3:0] ALUControl;
-	wire [31:0] ALUResult;
-	wire branch_res;
-
 	//Variables Mux_5
 	wire [4:0] mux_5_result;
 	wire mux_5_select;
@@ -82,15 +87,9 @@ module DataPath();
 	//Variables SignExtend 16->32
 	wire [31:0] extend_32;
 
-	//Variable InstructionMemory
-	wire [31:0] instruction;
 
-	//Variable DataMemory
-	reg [7:0] data_memory [1023:0];
-	wire [31:0] readDataMemory;
 
 	//Jump
-	wire [31:0] jal;
 	wire [31:0] aluResultJump;
 
 	//Lui
@@ -99,7 +98,6 @@ module DataPath();
 
 	//Unicos
 	wire and_unico;
-
 
 	integer i;
 	initial begin
@@ -111,30 +109,25 @@ module DataPath();
 		end
 	end
 
+
+
 	//Join para el jump
-	JoinShiftJump JoinShiftJump(instruction[31:28], instruction[25:0], target_pc_im);
-
-
-	// Adder shift 2 y PC
-	Add AddPCAndImmediate(target_pc, shift_2, shift_2);
+	JoinShiftJump JoinShiftJump(pc[31:28], instruction[25:0], target_pc_im);
 
 	//Mux antes del mux Jump
-	Mux MuxPCAdder(target_pc, shift_2, aluResultJump, Branch);
+	Mux MuxPCAdder(pc, shift_2, aluResultJump, Branch);
 
-	//Mux para ver si se ejecuta jump o no y JR
-	Mux_3 MuxJumpJR(aluResultJump, target_pc_im, readData1, target_pc_im, Jump);
-
-	//Clock modulo
-	Clock Clock(clk);
-
-	//Encargado de hacer los cambios al PC
-	PC PCModule(clk, pc, target_pc_im, Jump, Branch);
+	// Adder shift 2 y PC
+	Add AddPCAndImmediate(pc, shift_2, shift_2);
 
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 ShiftLeftAdder(extend_32, shift_2);
 
+	//Mux para ver si se ejecuta jump o no y JR
+	//Mux_3 MuxJumpJR(aluResultJump, target_pc_im, readData1, target_pc_im, Jump);
+	
 	//Mux de MemtoReg
-	Mux_3 MuxMemtoReg(ALUResult, readDataMemory, target_pc, mux_mem_to_reg, MemoryToRegister);
+	Mux_3 MuxMemtoReg(ALUResult, readDataMemory, pc, mux_mem_to_reg, MemoryToRegister);
 
 	//LUIControl
 	Mux muxLUI({16'h0000,op_15_0}, mux_mem_to_reg, mux_out_lui, LUIctrl);
@@ -147,6 +140,7 @@ module DataPath();
 
 	//And de Branch (Control) y el resultado de la ALU para jump
 	AND AndControl(Branch, branch_res, and_unico);
+
 
 	//Extiende el signo de 16 a 32bits
 	SignExtend SignExtend(op_15_0, extend_32);
@@ -172,6 +166,12 @@ module DataPath();
 	//Encargado de manejar la memoria
 	DataMemory DataMemory(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite,
 												readDataMemory);
+
+	//Clock modulo
+	Clock Clock(clk);
+
+	//Encargado de hacer los cambios al PC
+	PC PCModule(clk, pc, target_pc_im, Jump, Branch);
 
 	initial begin
 

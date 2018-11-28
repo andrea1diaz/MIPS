@@ -5,7 +5,7 @@ module Mux_3_5(in1, in2, in3, out, select);
 	input wire [1:0] select;
 	output reg [4:0] out;
 
-	always@(select) begin
+	always@(in1 or in2 or in3 or select) begin
 		if(select == 2'b00) begin
 			out = in1;
 		end

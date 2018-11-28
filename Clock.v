@@ -8,7 +8,7 @@ end
 initial #60 $finish();
 
 always begin
-	#3 clk = ~clk;
+	#10 clk = ~clk;
 end
 
 endmodule

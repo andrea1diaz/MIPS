@@ -4,6 +4,5 @@ output reg[31:0] receiver;
 
 always@(sum_amount or receiver) begin
 	receiver = sum_amount + receiver;
-
 end
 endmodule

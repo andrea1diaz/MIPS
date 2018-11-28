@@ -11,7 +11,7 @@ module PC(clk, pc, target_pc, Jump, Branch);
 
 	always @ (posedge clk) begin
 		pc = pc + 32'h4;
-		if (Jump == 2'b01  || Jump == 2'b01 || Branch)
+		if (Jump == 2'b10  || Jump == 2'b01 || Branch)
 			pc = target_pc;
 	end
 endmodule
