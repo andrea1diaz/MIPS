@@ -144,22 +144,23 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
         Jr = 1'b0;
 	    end
 
-      S10: begin // jal
-        RegistroDestino = 1'b0;
-        Jump = 1'b0;
+      S10: begin // Jal
+        RegistroDestino = 1'bz;
+        Jump = 1'b1;
         Branch = 1'b0;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'b0;
-        ALUOpcode = 2'b00;
+        MemoryToRegister = 1'bz;
+        ALUOpcode = 2'bzz;
         MemoryWrite = 1'b0;
-        ALUSrc = 1'b0;
+        ALUSrc = 1'bz;
         RegisterWrite = 1'b1;
         Jal = 1'b1;
         Jr = 1'b0;
       end
-      S11: begin //JR
-        RegistroDestino = 1'b0;
-        Jump = 1'b0;
+
+      S11: begin //Jr
+        RegistroDestino = 1'b1;
+        Jump = 1'b1;
         Branch = 1'b0;
         MemoryRead = 1'b0;
         MemoryToRegister = 1'b0;
@@ -179,14 +180,18 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
         Opcode[31:26] == 6'b001100 || Opcode[31:26] == 6'b001101 ||
         Opcode[31:26] == 6'b001010 || Opcode[31:26] == 6'b100000 ||
         Opcode[31:26] == 6'b100001 || Opcode[31:26] == 6'b101000 ||
-        Opcode[31:26] == 6'b101001)
+        Opcode[31:26] == 6'b101001 )
       state = S1;
 
-    if (Opcode[31:26] == 6'b000000) //sll (wtf?)
+
+    if (Opcode[31:26] == 6'b000000) // wtf?
       state = S6;
 
-    if (Opcode[31:26] == 6'b001000)
+    if (Opcode[31:26] == 6'b001000) // addi
       state = S4;
+
+    if(Opcode[31:26] == 6'b111111) // subi
+      state = S7;
 
     if (Opcode[31:26] == 6'b000100 || Opcode[31:26] == 6'b000101 ||
         Opcode[31:26] == 6'b000111)
@@ -197,6 +202,9 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
 
     if (Opcode[31:26] == 6'b000011) // jal
       state = S10;
+
+    if (Opcode[31:26] == 6'000000 && Opcode[3:0] == 4'1000) // junior
+      state = S11;
 
 
     case (state)
@@ -219,9 +227,6 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
 
         if (Opcode[31:26] == 6'b101001) // sh
           state = S3;
-
-        if (Opcode[31:26] == 6'b001000) // addi
-          state = S4;
 
         if (Opcode[31:26] == 6'b001100) // ANDi
           state = S4;
