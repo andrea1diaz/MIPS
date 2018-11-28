@@ -1,179 +1,188 @@
 module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
-           RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump, Jal, Jr);
+           RegistroDestino, MemoryToRegister, MemoryRead, Branch, Jump, Jal, LUIctrl);
 
 
   input [31:0] Opcode;
   input wire clk, rst;
-  output reg RegistroDestino;
-  output reg Jump;
+  output reg [1:0]RegistroDestino;
+  output reg [1:0]Jump;
   output reg Branch;
   output reg MemoryRead;
-  output reg MemoryToRegister;
+  output reg [1:0]MemoryToRegister;
   output reg [1:0]ALUOpcode;
   output reg [0:0]MemoryWrite;
   output reg ALUSrc;
   output reg RegisterWrite;
   output reg Jal;
-  output reg Jr;
+  output reg LUIctrl;
 
   reg [3:0]state;
 
-  parameter S1=1, S2=2, S3=3, S4=4, S5=5, S6=6, S7=7, S8=8, S9=9, S10=10, S11=11;
+  parameter S1=1, S2=2, S3=3, S4=4, S5=5, S6=6, S7=7, S8=8, S9=9, S10=10, S11=11,S12=12;
 
 
   always @ (state or Opcode) begin
     case (state)
       S1: begin // lw || sw || ORi || ANDi
-        RegistroDestino = 1'b0;
-        Jump = 1'b0;
+        RegistroDestino = 2'b00;
+        Jump = 2'b00;
         Branch = 1'b0;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'b0;
+        MemoryToRegister = 2'b00;
         ALUOpcode = 2'b00;
         MemoryWrite = 1'b0;
         ALUSrc = 1'b1;
         RegisterWrite = 1'b0;
         Jal = 1'b0;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
       end
 
       S2: begin // load word
-        RegistroDestino = 1'b0;
-        Jump = 1'b0;
+        RegistroDestino = 2'b00;
+        Jump = 2'b00;
         Branch = 1'b0;
         MemoryRead = 1'b1;
-        MemoryToRegister = 1'b1;
+        MemoryToRegister = 2'b01;
         ALUOpcode = 2'b00;
         MemoryWrite = 1'b0;
         ALUSrc = 1'b1;
         RegisterWrite = 1'b1;
         Jal = 1'b0;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
       end
 
       S3: begin // store word
-        RegistroDestino = 1'bx;
-        Jump = 1'b0;
+        RegistroDestino = 2'bzz;
+        Jump = 2'b00;
         Branch = 1'b0;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'bx;
+        MemoryToRegister = 2'bzz;
         ALUOpcode = 2'b00;
         MemoryWrite = 1'b1;
         ALUSrc = 1'b1;
         RegisterWrite = 1'b0;
 	      Jal = 1'b0;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
       end
 
       S4: begin //addi
-        RegistroDestino = 1'b0;
-        Jump = 1'b0;
+        RegistroDestino = 2'b00;
+        Jump = 2'b00;
         Branch = 1'b0;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'b0;
+        MemoryToRegister = 2'b00;
         ALUOpcode = 2'b00;
         MemoryWrite = 1'b1;
         ALUSrc = 1'b1;
         RegisterWrite = 1'b1;
         Jal = 1'b0;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
 	    end
-
       S5: begin // op R-type
-        RegistroDestino = 1'b0;
-        Jump = 1'b0;
+        RegistroDestino = 2'b00;
+        Jump = 2'b00;
         Branch = 1'b0;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'b0;
+        MemoryToRegister = 2'b00;
         ALUOpcode = 2'b10;
         MemoryWrite = 1'b0;
         ALUSrc = 1'b0;
         RegisterWrite = 1'b1;
         Jal = 1'b0;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
 	    end
-
       S6: begin // op R-type
-        RegistroDestino = 1'b1;
-        Jump = 1'b0;
+        RegistroDestino = 2'b01;
+        Jump = 2'b00;
         Branch = 1'b0;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'b0;
+        MemoryToRegister = 2'b00;
         ALUOpcode = 2'b10;
         MemoryWrite = 1'b1;
         ALUSrc = 1'b0;
         RegisterWrite = 1'b1;
         Jal = 1'b0;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
 	    end
-
       S7: begin //beq
-        RegistroDestino = 1'b0;
-        Jump = 1'b0;
+        RegistroDestino = 2'b00;
+        Jump = 2'b00;
         Branch = 1'b0;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'b0;
+        MemoryToRegister = 2'b00;
         ALUOpcode = 2'b01;
         MemoryWrite = 1'b0;
         ALUSrc = 1'b0;
         RegisterWrite = 1'b0;
         Jal = 1'b0;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
 	    end
-
       S8: begin //beq
-        RegistroDestino = 1'bz;
-        Jump = 1'b0;
+        RegistroDestino = 2'bzz;
+        Jump = 2'b00;
         Branch = 1'b1;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'bz;
+        MemoryToRegister = 2'bzz;
         ALUOpcode = 2'b01;
         MemoryWrite = 1'b0;
         ALUSrc = 1'b0;
         RegisterWrite = 1'b0;
         Jal = 1'b0;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
 	    end
-
       S9: begin //jump
-        RegistroDestino = 1'b0;
-        Jump = 1'b1;
+        RegistroDestino = 2'b00;
+        Jump = 2'b01;
         Branch = 1'b0;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'b0;
+        MemoryToRegister = 2'b00;
         ALUOpcode = 2'b00;
         MemoryWrite = 1'b0;
         ALUSrc = 1'b0;
         RegisterWrite = 1'b0;
         Jal = 1'b0;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
 	    end
 
       S10: begin // Jal
-        RegistroDestino = 1'bz;
-        Jump = 1'b1;
+        RegistroDestino = 2'b10;
+        Jump = 2'b01;
         Branch = 1'b0;
         MemoryRead = 1'b0;
-        MemoryToRegister = 1'bz;
+        MemoryToRegister = 2'b10;
         ALUOpcode = 2'bzz;
         MemoryWrite = 1'b0;
         ALUSrc = 1'bz;
         RegisterWrite = 1'b1;
         Jal = 1'b1;
-        Jr = 1'b0;
+        LUIctrl = 1'b0;
       end
 
-      S11: begin //Jr
-        RegistroDestino = 1'bz;
-        Jump = 1'b1;
-        Branch = 1'bz;
+      S11: begin //Junior
+        RegistroDestino = 2'bzz;
+        Jump = 2'b10;
+        Branch = 1'b0;
         MemoryRead = 1'bz;
         MemoryToRegister = 1'bz;
         ALUOpcode = 2'bzz;
         MemoryWrite = 1'b0;
         ALUSrc = 1'bz;
         RegisterWrite = 1'b0;
-        Jal = 1'bz;
+        Jal = 1'b0;
+        LUIctrl = 1'bz;
+      end
+      S12: begin //LUI
+        RegistroDestino = 2'b00;
+        Jump = 2'b00;
+        Branch = 1'b0;
+        MemoryRead = 1'bz;
+        MemoryToRegister = 1'bz;
+        ALUOpcode = 2'bxx;
+        MemoryWrite = 1'b0;
+        ALUSrc = 1'bz;
+        RegisterWrite = 1'b1;
+        Jal = 1'b0;
+        LUIctrl = 1'b1;
       end
 
   endcase
@@ -207,7 +216,7 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
     if (Opcode[31:26] == 6'b000011) // jal
       state = S10;
 
-    if (Opcode[31:26] == 6'000000 && Opcode[3:0] == 4'1000) // junior
+    if (Opcode[31:26] == 6'b000000 && Opcode[3:0] == 4'b1000) // junior
       state = S11;
 
 

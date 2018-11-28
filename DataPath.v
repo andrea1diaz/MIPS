@@ -1,6 +1,8 @@
 `include "Add.v"
 `include "AND.v"
 `include "ALU.v"
+`include "Mux_3.v"
+`include "Mux_3_5.v"
 `include "ALUControl.v"
 `include "CONTROL.v"
 `include "InstructionMemory.v"
@@ -49,17 +51,16 @@ module DataPath();
 	wire[31:0] readData2;
 
 	//Variables de CONTROL
-	wire Jump;
-	wire RegistroDestino;
+	wire [1:0]Jump;
+	wire [1:0]RegistroDestino;
 	wire Branch;
 	wire MemoryRead;
-	wire MemoryToRegister;
+	wire [1:0]MemoryToRegister;
 	wire [0:0] MemoryWrite;
 	wire [1:0] ALUOpcode;
 	wire ALUSrc;
 	wire RegisterWrite;
 	wire Jal;
-	wire Jr;
 
 	//Variables ALU
 	wire [31:0] A, B;
@@ -112,6 +113,8 @@ module DataPath();
 
 
 
+
+
 	/////Modulos por resolver
 	//Join para el jump
 	JoinShiftJump JoinShiftJump(instruction[31:28], instruction[25:0], target_pc_im);
@@ -124,7 +127,9 @@ module DataPath();
 
 
 	//Mux para ver si se ejecuta jump o no
-	Mux MuxJump(aluResultJump, target_pc_im, target_pc_im, Jump);
+	//Mux MuxJump(aluResultJump, target_pc_im, target_pc_im, Jump);
+
+	Mux_3 MuxJumpJR(aluResultJump, target_pc_im, readData1, target_pc_im, Jump);
 
 	//// Operaciones resueltas
 
@@ -140,13 +145,13 @@ module DataPath();
 	ShiftLeft2 ShiftLeftAdder(extend_32, shift_2);
 
 	//Mux de MemtoReg
-	Mux MuxMemtoReg(ALUResult, readDataMemory, mux_mem_to_reg, MemoryToRegister);
+	Mux_3 MuxMemtoReg(ALUResult, readDataMemory, target_pc, mux_mem_to_reg, MemoryToRegister);
 
 	//LUIControl
-	Mux muxLUI(op_15_0, mux_mem_to_reg, mux_out_ui, LUIctrl);
+	Mux muxLUI({16'h0000,op_15_0}, mux_mem_to_reg, mux_out_lui, LUIctrl);
 
-	//Mux 5 para las instrucciones de write register
-	Mux_5 MuxRegDst(op_20_16, op_15_11, mux_5_result, RegistroDestino);
+	//Mux 5 para las instrucciones de write register y Jal
+	Mux_3_5 MuxRegDst(op_20_16, op_15_11, 5'd31, mux_5_result, RegistroDestino);
 
 	//Mux que lee del  register  y el sign extende y va al ALU
 	Mux MuxALU(readData2, extend_32, mux_32_result, ALUSrc);
@@ -170,7 +175,7 @@ module DataPath();
 	//Control con flags para otros modulos
 	CONTROL Control(clk, rst, instruction, ALUOpcode, ALUSrc, MemoryWrite,
 									RegisterWrite, RegistroDestino, MemoryToRegister, MemoryRead,
-									Branch, Jump, Jal, Jr);
+									Branch, Jump, Jal, LUIctrl);
 
 	//Control con flags para el ALU
 	ALUControl ALUcontrol(clk, rst, ALUOpcode, ALUControl, op_5_0);
@@ -179,8 +184,6 @@ module DataPath();
 	//Encargado de manejar la memoria
 	DataMemory DataMemory(clk, rst, ALUResult, readData2, MemoryRead, MemoryWrite,
 												readDataMemory);
-
-
 
 	initial begin
 
