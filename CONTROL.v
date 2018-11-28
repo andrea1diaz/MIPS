@@ -159,17 +159,16 @@ module CONTROL (clk, rst, Opcode, ALUOpcode, ALUSrc, MemoryWrite, RegisterWrite,
       end
 
       S11: begin //Jr
-        RegistroDestino = 1'b1;
+        RegistroDestino = 1'bz;
         Jump = 1'b1;
-        Branch = 1'b0;
-        MemoryRead = 1'b0;
-        MemoryToRegister = 1'b0;
-        ALUOpcode = 2'b00;
+        Branch = 1'bz;
+        MemoryRead = 1'bz;
+        MemoryToRegister = 1'bz;
+        ALUOpcode = 2'bzz;
         MemoryWrite = 1'b0;
-        ALUSrc = 1'b0;
+        ALUSrc = 1'bz;
         RegisterWrite = 1'b0;
-        Jal = 1'b0;
-        Jr = 1'b1;
+        Jal = 1'bz;
       end
 
   endcase

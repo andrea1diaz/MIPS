@@ -14,7 +14,7 @@ main:
 
     jr $ra
 
-fibo: 
+fibo:
     addi $sp, $sp, -12
     sw $s0, 0($sp)
     sw $s1, 4($sp)
