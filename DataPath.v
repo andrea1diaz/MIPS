@@ -96,6 +96,7 @@ module DataPath();
 	//Unicos
 	wire and_unico;
 
+
 	integer i;
 	initial begin
 		for( i = 0; i < 1024; i = i + 1 ) begin
@@ -112,15 +113,15 @@ module DataPath();
 	//Join para el jump
 	JoinShiftJump JoinShiftJump(instruction[31:28], instruction[25:0], target_pc_im);
 
-	//Mux para ver si se ejecuta jump o no
-	//Mux MuxJump(target_pc_im, target_pc, target_pc, Jump);
-
 	// Adder shift 2 y PC
 	Add AddPCAndImmediate(target_pc, shift_2, shift_2);
 
 	//Mux antes del mux Jump
-	//Mux MuxPCAdder(target_pc, shift_2, aluResultJump, Branch);
+	Mux MuxPCAdder(target_pc, shift_2, aluResultJump, Branch);
 
+
+	//Mux para ver si se ejecuta jump o no
+	Mux MuxJump(aluResultJump, target_pc_im, target_pc_im, Jump);
 
 	//// Operaciones resueltas
 
@@ -128,7 +129,9 @@ module DataPath();
 	Clock Clock(clk);
 
 	//Encargado de hacer los cambios al PC
-	PC PCModule(clk, pc);
+	PC PCModule(clk, pc, target_pc_im, Jump, Branch);
+
+
 
 	//Shift left sumar al PC una direccion
 	ShiftLeft2 ShiftLeftAdder(extend_32, shift_2);
